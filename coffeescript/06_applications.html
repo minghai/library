@@ -2,10 +2,10 @@
 <html>
 <head>
 <meta charset=utf-8>
-<title>The Little Book on CoffeeScript - {{name}}</title>
+<title>The Little Book on CoffeeScript - Applications</title>
 <link rel="stylesheet" href="site/site.css" type="text/css" charset="utf-8">
 <link rel="stylesheet" href="site/highlight.css" type="text/css" charset="utf-8">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>      
+<script src="site/jquery.js" type="text/javascript" charset="utf-8"></script>      
 <script src="site/highlight.js" type="text/javascript" charset="utf-8"></script>
 <script src="site/coffee-script.js" type="text/javascript" charset="utf-8"></script>
 <script src="site/preview.js" type="text/javascript" charset="utf-8"></script>
@@ -20,7 +20,8 @@
   </header>
   
   <div id="content">
-<div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
+    <div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
+
 
 <h1>アプリケーションを作成する</h1>
 
@@ -196,13 +197,14 @@ User = require("models/user")
 <p>ご覧のとおり、文法は際立って直接的です。ただ<code>&lt;%</code>タグを使って式を評価し、<code>&lt;%=</code>タグは表示のために用います。テンプレートタグの一部のリストは次のとおりです。</p>
 
 <ul>
-<li><p><code>&lt;% expression %&gt;</code> <br />
+<li><p><code>&lt;% expression %&gt;</code><br/>
 CoffeeScriptの式を評価する。その返り値はプリントしない。</p></li>
-<li><p><code>&lt;%= expression %&gt;</code> <br />
+<li><p><code>&lt;%= expression %&gt;</code><br/>
 CoffeeScriptの式を評価する。その返り値をエスケープし、プリントする。</p></li>
-<li><p><code>&lt;%- expression %&gt;</code> <br />
+<li><p><code>&lt;%- expression %&gt;</code><br/>
 CoffeeScriptの式を評価し、その返り値をエスケープせずにプリントする。</p></li>
 </ul>
+
 
 <p>任意のCoffeeScriptの式をテンプレートタグの中で使用することが可能ですが、気をつけることが1つだけあります。CoffeeScriptは空白に敏感です。しかしEcoテンプレートはそうではありません。従ってインデントされたCoffeeScriptブロックを始めるEcoテンプレートタグはコロンを追加せねばなりません。インデントブロックの終わりを示すには特別なタグ<code>&lt;% end %&gt;</code>を使用します。次の例をご覧下さい。</p>
 
@@ -267,7 +269,7 @@ module.exports = App
 
 <pre><code>git init
 git add .
-git commit -m "First commit"
+git commit -m "First commit"    
 </code></pre>
 
 <p>それではアプリケーションをデプロイしましょう。<code>heroku</code>コマンドを使います。(まだインストールしていなければする必要があります。)</p>
@@ -288,6 +290,7 @@ heroku open
 <p>アプリケーションの提供に関しては<a href="http://github.com/maccman/hem">Hem</a>は良い選択です。CommonJSとNPMモジュールの両方をサポートし、CoffeeScriptのMVCフレームワークである<a href="http://spinejs.com">Spine</a>とシームレスに結合できます。<a href="https://github.com/substack/node-browserify">node-browsify</a>も同様のプロジェクトです。もし<a href="http://expressjs.com/">express</a>を用いて低レベルの結合をしたい場合にはTrevor Burnhamの <a href="https://github.com/TrevorBurnham/connect-assets">connect-assets</a>もあります。</p>
 
 <p>CoffeeScriptのWebフレームワークプラグインの完全なリストは<a href="https://github.com/jashkenas/coffee-script/wiki/Web-framework-plugins">project's wiki</a>にあります。</p>
+
   </div>
 </div>
 </body>
