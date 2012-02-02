@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>The Little Book on CoffeeScript - {{name}}</title>
+<link rel="stylesheet" href="site/site.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="site/highlight.css" type="text/css" charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>      
+<script src="site/highlight.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/coffee-script.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/preview.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+  hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="container">
+  <header>
+    <h1><a href="index.html">The Little Book on CoffeeScript</a></h1>
+  </header>
+  
+  <div id="content">
+<div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
+
+<h1>自動的にCoffeeScriptをコンパイルする</h1>
+
+<p>CoffeeScriptの問題はあなたとJavaScriptの間に他のレイヤーを増やすことです。CoffeeScriptのファイルが変更され、古くなる度に手動でコンパイルせねばなりません。幸いなことにCoffeeScriptはいくつかのコンパイル代替形態を持っており、開発サイクルをいくらかスムーズにすることが可能です。</p>
+
+<p>最初の章で説明したとおり、CoffeeScriptは<code>coffee</code>コマンドを用いてコンパイル可能です。</p>
+
+<pre><code>coffee --compile --output lib src
+</code></pre>
+
+<p>上の例では全ての<code>src</code>ディレクトリ内の<code>.coffee</code>ファイルはコンパイルされ、<code>lib</code>ディレクトリに個々の出力が置かれます。これを呼ぶだけでもちょっと面倒かもしれません。自動化する方法を探しましょう。</p>
+
+<h2>Cake</h2>
+
+<p><a href="http://jashkenas.github.com/coffee-script/#cake">Cake</a>はとてもシンプルなビルドシステムで<a href="http://www.gnu.org/software/make/">Make</a> や <a href="http://rake.rubyforge.org/">Rake</a>に倣っています。このライブラリは<code>coffee-script</code>のnpmパッケージにバンドルされており<code>cake</code>という名前のコマンドで利用可能です。</p>
+
+<p><code>Cakefile</code>と呼ばれるファイルにCoffeeScriptを用いることでタスクを定義できます。<code>cake [task] [options]</code>を同じディレクトリで実行することにより、Cakeがそれらのタスクを取り上げ、実行さうぇることが可能です。全てのタスクとオプションのリストを表示するにはただ<code>cake</code>と入力します。</p>
+
+<p>タスクは<code>task()</code>関数を用いて定義します。名前と任意で詳細説明とコールバック関数を与えます。例として<code>Cakefile</code>という名のファイルを作り、<code>lib</code>と<code>src</code>という2つのディレクトリを作成してください。<code>Cakefile</code>には次の内容を追加します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>fs = require 'fs'
+
+{print} = require 'sys'
+{spawn} = require 'child_process'
+
+build = (callback) -&gt;
+  coffee = spawn 'coffee', ['-c', '-o', 'lib', 'src']
+  coffee.stderr.on 'data', (data) -&gt;
+    process.stderr.write data.toString()
+  coffee.stdout.on 'data', (data) -&gt;
+    print data.toString()
+  coffee.on 'exit', (code) -&gt;
+    callback?() if code is 0
+
+task 'build', 'Build lib/ from src/', -&gt;
+  build()
+</code></pre>
+
+<p>上の例では<code>build</code>というタスクを定義しました。<code>cake build</code>で実行できます。これは先の例と同じコマンドを実行し<code>src</code>にあるCoffeeScriptファイルを全てJavaScriptにコンパイルし、<code>lib</code>に置きます。これでHTMLファイルから通常どおりに<code>lib</code>の中にあるJavaScriptファイルを参照できます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=utf-8&gt;
+&lt;script src="lib/app.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;      
+&lt;/head&gt;
+&lt;body&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>これではまだ<code>cake build</code>をCoffeeScriptのコードを変更するたびに手動で実行せねばなりません。理想からは遠いです。幸運なことに、<code>coffee</code>コマンドは別のオプションがあります。<code>--watch</code>はコマンドにディレクトリに対して変更を見張るように指示し、必要な場合にはリコンパイルします。それを用いて別のタスクを定義しましょう。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code> task 'watch', 'Watch src/ for changes', -&gt;
+    coffee = spawn 'coffee', ['-w', '-c', '-o', 'lib', 'src']
+    coffee.stderr.on 'data', (data) -&gt;
+      process.stderr.write data.toString()
+    coffee.stdout.on 'data', (data) -&gt;
+      print data.toString()
+</code></pre>
+
+<p>もしあるタスクが別のタスクに依存する場合、別のタスクを<code>invoke(name)</code>を用いて実行すらことが可能です。<code>Cakefile</code>にもう一つ便利なタスクを追加しましょう。<code>index.html</code>を開きソースの変更の見張りを開始します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>task 'open', 'Open index.html', -&gt;
+  # 最初に開いて、次に見張る
+  spawn 'open', 'index.html'
+  invoke 'watch'
+</code></pre>
+
+<p>タスクには<code>option()</code>関数を用いてオプションを定義することが可能です。引数として短かい名前、長い名前、そして説明を渡せます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>option '-o', '--output [DIR]', 'output dir'
+
+task 'build', 'Build lib/ from src/', -&gt;
+  # Now we have access to a `options` object
+  coffee = spawn 'coffee', ['-c', '-o', options.output or 'lib', 'src']
+  coffee.stderr.on 'data', (data) -&gt;
+    process.stderr.write data.toString()
+  coffee.stdout.on 'data', (data) -&gt;
+    print data.toString()
+</code></pre>
+
+<p>As you can see, the task context now has access to an <code>options</code> object containing any data specified by the user. If we run <code>cake</code> without any other arguments, all the tasks and options will be listed.
+ご覧のとおり、タスクコンテキストがユーザが指定した任意のデータを持つ<code>options</code>オブジェクトにアクセス可能となりました。もし<code>cake</code>を引数無しで実行した場合、全てのタスクと引数がリストされます。</p>
+
+<p>Cake's a great way of automating common tasks such as compiling CoffeeScript without going to the hassle of using bash or Makefiles. It's also worth taking a look at <a href="http://jashkenas.github.com/coffee-script/documentation/docs/cake.html">Cake's source</a>, a great example of CoffeeScript's expressiveness and beautifully documented alongside the code comments.
+Cakeは、bashやMakeファイルを用いずにCoffeeScriptをコンパイルするような一般的なタスクを自動化する、素晴しい方法です。<a href="http://jashkenas.github.com/coffee-script/documentation/docs/cake.html">Cakeのソース</a>を読むことにはとても価値があります。CoffeeScriptの表現力の素晴しい例です。コードにはコメントが添えられて美しくドキュメント化されています。</p>
+
+<h2>サーバサイドサポート</h2>
+
+<p>CakeをCoffeeScriptのコンパイルに用いるのは静的なサイトでは問題ありません。しかし動的なサイトではCoffeeScriptのコンパイルをリクエスト/レスポンスサイクルに統合せねばなりません。色々な統合ソリューションが人気の高いバックエンドの言語とフレームワークに対して既に存在します。例えば<a href="http://rubyonrails.org/">Rails</a> や <a href="https://www.djangoproject.com/">Django</a>です。</p>
+
+<p>Rails3.1ではCoffeeScriptのサポートは<a href="https://github.com/sstephenson/sprockets">Sprockets &amp; the asset pipeline</a>を通して提供されます。CoffeeScriptファイルを<code>app/assets/javascripts</code>の下に追いてください。Railsは十分に賢くリクエストを受けたときに事前にコンパイルします。JavaScriptとCoffeeScriptのファイルは特別なコメントの指示を用いて包まれ、連結されます。これは1つのリクエストでアプリケーションの全てのJavaScriptを取得することが可能であることを意味します。運用時にはRailsはコンパイル結果をディスクに記録し、キャッシュされ、高速なサービスを保障します。</p>
+
+<p>他のRubyの選択肢には<a href="http://rack.github.com/">rack</a>サーバがあります。例えば37signalの<a href="http://pow.cx/">Pow</a> や Joshua Peek の <a href="http://josh.github.com/nack/">Nack</a>があります。両者共、もしあなたのアプリケーションがRailsの他の機能や関連するオーバーヘッドを必要としないのなら最高にお勧めです。</p>
+
+<p>Djangoもまた<a href="http://pypi.python.org/pypi/django-coffeescript/">CoffeeScriptのサポート</a>を特別なテンプレートタグを通して行います。インラインコードでも外部ファイルでも利用可能です。</p>
+
+<p>RubyとPythonは共にCoffeeScriptをコンパイルする時、NodeやCoffeeScriptのライブラリへパイプから出力します。そのためそれらを開発の間にインストールしなければなりません。もしNodeを直接、あなたのサイトのバックエンドとして使用している場合、CoffeeScriptの統合はよりシンプルで、バックエンドとフロントエンドコードの両方で使用可能です。このことについては次の章でより詳しく説明します。<a href="https://github.com/sstephenson/stitch">Stitch</a>を用いて全てのクライアントサイドCoffeeScriptを提供します。</p>
+  </div>
+</div>
+</body>
+</html>

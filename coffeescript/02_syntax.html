@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>The Little Book on CoffeeScript - {{name}}</title>
+<link rel="stylesheet" href="site/site.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="site/highlight.css" type="text/css" charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>      
+<script src="site/highlight.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/coffee-script.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/preview.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+  hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="container">
+  <header>
+    <h1><a href="index.html">The Little Book on CoffeeScript</a></h1>
+  </header>
+  
+  <div id="content">
+<div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
+
+<h1>CoffeeScriptの文法</h1>
+
+<p>最初にこのセクションを始める前に再確認しておきましょう。CoffeeScriptの文法はしばしばJavaScriptと同じですが拡張ではありません。従っていくらかのJavaScriptのキーワード、例えば<code>function</code>や<code>var</code>は許されません。文法エラーになります。CoffeeScriptのファイルを書くのであれば純粋にCoffeeScriptである必要があります。2つの言語を混ぜることはできません。</p>
+
+<p>なぜCoffeeScriptは拡張ではないのでしょうか? それはCoffeeScriptプログラムの空白が重要であることが、拡張であることを妨げるからです。その決定が行われてからはチームはあなたもまたそれに完璧に従いJavaScriptのいくつかのキーワードを非推奨として扱うことを、簡潔さの掟とよくあるバグを減らすための努力の名の元に行うよう決定したのです。</p>
+
+<p>メタ的な意味で驚いたのはCoffeeScriptインタプリタ自身が実際にCoffeeScriptで書かれていたことでした。それは卵と鶏のパラドックスがついに解決したかに見えました！</p>
+
+<p>さて、それでは最初に基本的な事柄に取り掛かりましょう。CoffeeScriptにはセミコロンがありません。コンパイル時に自動的に追加してくれます。セミコロンはJavaScriptコミュニティにおいて、いくつかのおかしなインタプリタの挙動<a href="http://bonsaiden.github.com/JavaScript-Garden/#core.semicolon">behavior</a>により多くの議論の的でした。とにかく、CoffeeScriptはこの問題を単純にセミコロンを文法から消し、状況により追加することで解決しました。</p>
+
+<p>コメントはRubyのコメントと同じフォーマットです。ハッシュ文字(<code>#</code>:通称、シャープ)で始めます。</p>
+
+<pre><code># これはコメント
+</code></pre>
+
+<p>複数行のコメントもまたサポートされており、生成されたJavaScriptに適用されます。3つのシャープで括ります。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>###
+  複数行のコメント。たぶん、ライセンス
+###
+</code></pre>
+
+<p>既に手短に説明しましたが、CoffeeScriptでは空白が重要です。実際に、これは中括弧(<code>{}</code>)をタブで置き換えられることを意味します。これはPythonの文法からインスピレーションを得ており、あなたのスクリプトが同じ様式で整形される保障という素敵な副作用を持っています。そうしなければコンパイルもできません！</p>
+
+<h2>変数とスコープ</h2>
+
+<p>CoffeeScriptはJavaScriptの主な問題の1つを直しました。グローバル変数です。JavaScriptでは変数宣言の前に<code>var</code>を置くのを忘れてしまったために不本意にグローバル変数を宣言してしまうことが頻繁でした。CoffeeScriptはこれを単純にグローバル変数を無くすことで解決しています。裏側ではCoffeeScriptはスクリプトを無名関数でラップすることでローカルコンテキストを保持しています。そして自動的に全ての変数宣言に<code>var</code>を付けています。例えば次の単純な変数の割当をご覧下さい。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>myVariable = "test"
+</code></pre>
+
+<p>上のコード例の右上にダークグレーの箱があるのに気付かれますでしょうか。それをクリックしてください。コードはCoffeeScriptとコンパイルされたJavaScriptとでスィッチします。これはページの丁度中で実行時に描かれています。そのためコンパイルされた出力が正しいことを確認できるでしょう。</p>
+
+<p>ご覧になられたとおり、変数の割当は完全にローカルに保持されます。グローバル変数を事故で作ることは不可能です。CoffeeScriptは実際にこのステップを延長し、高いレベルの変数を隠すことを難しくしています。このことがJavaScriptにおいて開発者が最も一般的に行ってしまう誤りのいくつかを防ぐ良い取り決めとなっています。</p>
+
+<p>しかしながら、時々、グローバル変数を作ることは便利な事です。グローバルオブジェクト(ブラウザでは<code>window</code>)のプロパティとして直接設定するか、次のパターンを用いることで可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>exports = this
+exports.MyVariable = "foo-bar"
+</code></pre>
+
+<p>rootコンテキストでは<code>this</code>はグローバルオブジェクトに等しくなります。<code>exports</code>という名の変数を作成することで、あなたのコードを読む誰にとってもスクリプトがどんなグローバル変数を作っているかが明らかになるでしょう。加えて、CommonJSモジュールについて可能とします。この本では後でその事についてもカバーします。</p>
+
+<h2>関数</h2>
+
+<p>CoffeeScriptはとても冗長なfunction文を削除しました。そしてそれを細い矢印:<code>-&gt;</code>で置き換えました。関数は1行でも良いし、インデントを行って複数行記述も可能です。関数の最後の式が暗黙的に返り値となります。つまり<code>return</code>文を使う必要がありません。関数の途中で返り値を返したい場合には使うことも可能です。</p>
+
+<p>そのことを頭に入れて、次の例を見てみましょう:</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>func = -&gt; "bar"
+</code></pre>
+
+<p>コンパイルの結果が、<code>-&gt;</code>が<code>function</code>になるのが見えると思います。そして<code>"bar"</code>という文字列が自動的にreturnされるのもおわかりでしょうか。</p>
+
+<p>先程お話しましたとおり、複数行を問題無く使うことができます。ただし適切に関数の本体をインデントする必要があります。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>func = -&gt;
+  # 余分な行
+  "bar"
+</code></pre>
+
+<h3>関数引数</h3>
+
+<p>引数はどうやって指定するのでしょうか？CoffeeScriptでは矢印の前で、括弧の中に引数を指定します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>times = (a, b) -&gt; a * b
+</code></pre>
+
+<p>CoffeeScriptはデフォルト引数もサポートします。例えば：</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>times = (a = 1, b = 2) -&gt; a * b
+</code></pre>
+
+<p>また可変長引数を利用するのにスプラットを用いることも可能です。<code>...</code>の名称です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>sum = (nums...) -&gt; 
+  result = 0
+  nums.forEach (n) -&gt; result += n
+  result
+</code></pre>
+
+<p>上の例では<code>nums</code>は関数に渡された全ての引数の配列です。これは<code>arguments</code>オブジェクトではありません。そうではなく本物の配列です。だからこれを取り扱うのに<code>Array.prototype.splice</code>や<code>jQuery.makeArray()</code>の使用をあなた自身で考慮する必要がありません。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>trigger = (events...) -&gt;
+  events.splice(1, 0, this)
+  this.constructor.trigger.apply(events)
+</code></pre>
+
+<h3>関数の実行</h3>
+
+<p>関数はJavaScriptと全く同じように実行することが可能です。括弧<code>()</code>を付けたり、<code>apply()</code>を適用したり、<code>call()</code>を呼んだりです。しかしRubyのように、CoffeeScriptは関数が最低一つの引数と実行されれば、自動的に関数を呼出します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>a = "Howdy!"
+
+alert a
+# 次と同じ
+alert(a)
+
+alert inspect a
+# 次と同じ
+alert(inspect(a))
+</code></pre>
+
+<p>括弧は必須ではありませんが、直ぐに何がどんな引数と実行されるか明らかに判る場合以外は使用することをお勧めします。<code>inspect</code>を用いる最後の例では、私は最低でも<code>inspect</code>の実行には括弧を付けることを強くお勧めします。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>alert inspect(a)
+</code></pre>
+
+<p>もし実行時に1つも引数を渡さない場合、CoffeeScriptはあなたが関数の実行を意味しているのか、変数として取り扱って欲しいのか理解できません。この事実より、CoffeeScriptの処理は常に関数参照を実行するRubyとは異なり、Pythonにより近いものとなっています。このことが私のCoffeeScriptプログラムではいくつかのエラーの元となりました。従ってあなたが引数無しで関数を起動する場合には十分に気を付けて括弧を付けましょう。</p>
+
+<h3>関数コンテキスト</h3>
+
+<p>コンテキストの変化はJavaScriptにおいて嫌なものです。特にイベントコールバックにおいては顕著です。そのためCoffeeScriptではこれを管理するためにいくらか助けとなるものを用意しました。そのようなヘルパーの一つが<code>-&gt;</code>のバリエーションである太った矢印(ファットアロー)<code>=&gt;</code>の関数です。</p>
+
+<p>細い矢印の代わりにファットアローを用いることで、関数のコンテキストがローカルのものに紐付けられることを確実にします。以下の例をご覧下さい。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>this.clickHandler = -&gt; alert "clicked"
+element.addEventListener "click", (e) =&gt; this.clickHandler(e)
+</code></pre>
+
+<p>これを行いたい理由は<code>addEventListener()</code>からのコールバックは<code>element</code>のコンテキストにて実行されるからです。すなわち<code>this</code>は<code>element</code>に等しくなります。もしあなたが<code>self = this</code>のような面倒をせずに<code>this</code>をローカルコンテキストに保持したい場合にはファットアローを用います。</p>
+
+<p>このバインディングのアイデアはjQueryの<a href="http://api.jquery.com/jQuery.proxy/"><code>proxy()</code></a>や<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind">ES5</a>の<code>bind()</code>関数と似たコンセプトです。</p>
+
+<h2>オブジェクトの構文と配列の定義</h2>
+
+<p>オブジェクト構文はJavaScriptと全く同じように指定可能です。中括弧のペアやキー/バリューの文を使います。しかし関数実行と同じように、CoffeeScriptは中括弧を省略可能です。実際に、インデントをまた使うことが可能ですし、改行をカンマの変わりに用いることができます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>object1 = {one: 1, two: 2}
+
+# 中括弧無しで
+object2 = one: 1, two: 2
+
+# 改行をカンマの変わりにする
+object3 = 
+  one: 1
+  two: 2
+
+User.create(name: "John Smith")
+</code></pre>
+
+<p>同様に、配列は空白をカンマの代わりに区切に用いることができます。ただし角括弧(<code>[]</code>)は必須です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>array1 = [1, 2, 3]
+
+array2 = [
+  1
+  2
+  3
+]
+
+array3 = [1,2,3,]
+</code></pre>
+
+<p>上の<code>array3</code>の例でわかるようにCoffeeScriptは最後のカンマ(<code>trailing comma</code>)を取り除いています。これもまた良くあるクロスブラウザでのエラーの元です。</p>
+
+<h2>フローコントロール</h2>
+
+<p>CoffeeScriptの括弧が必須でないというお約束は<code>if</code>と<code>else</code>キーワードでも続きます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>if true == true
+  "We're ok"
+
+if true != true then "Panic"
+
+# 以下と同じ意味
+#  (1 &gt; 0) ? "Ok" : "Y2K!"
+if 1 &gt; 0 then "Ok" else "Y2K!"
+</code></pre>
+
+<p>上でわかりますように、もし<code>if</code>文が1行であるなら<code>then</code>キーワードを用いる必要があります。そうすることでCoffeeScriptはいつブロックが始まるか理解できます。条件演算子(<code>?:</code>)はサポートされていません。そのかわりに1行で<code>if/else</code>文を用いなければいけません。</p>
+
+<p>CoffeeScriptはまたRubyの慣用句である後置<code>if</code>文を利用可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>alert "It's cold!" if heat &lt; 5
+</code></pre>
+
+<p>否定にびっくりマーク(<code>!</code>)を用いる代わりに、<code>not</code>キーワードを用いることが可能です。それを用いることでコードをより読み易くすることが可能です。びっくりマークは簡単に見落としますから。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>if not true then "Panic"
+</code></pre>
+
+<p>上の例ではCoffeeScriptの<code>unless</code>文を<code>if</code>の反対として使用可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>unless true
+  "Panic"
+</code></pre>
+
+<p><code>not</code>と似た感覚で、CoffeeScriptは<code>is</code>文も持っています。<code>===</code>に変換されます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>if true is 1
+  "Type coercion fail!"
+</code></pre>
+
+<p><code>is not</code>の代わりに、<code>isnt</code>を使用可能です。</p>
+
+<pre><code>if true isnt true
+  alert "Opposite day!"
+</code></pre>
+
+<p>You may have noticed in the examples above, that CoffeeScript is converting <code>==</code> operators into <code>===</code> and <code>!=</code> into <code>!==</code>. This is one of my favorite features to the language, and yet one of the most simple. What's the reasoning behind this? Well frankly JavaScript's type coercion is a bit odd, and its equality operator coerces types in order to compare them, leading to some confusing behaviors and the source of many bugs. There's a longer discussing on this topic in chapter 7.
+上の例でお気付きでしょうが、CoffeeScriptは<code>==</code>演算子を<code>===</code>に変換し、<code>!=</code>を<code>!==</code>に変換します。これはこの言語の私の好きな最もシンプルな機能の1つです。この考えの背景にあるものは何でしょうか？率直に言ってJavaScriptの型変換は少し変です。そしてそれらの比較演算子は比較のために型変換を強制します。そのことが理解し難い挙動に繋り、ひいては多くのバグの元となります。このトピックについては第7章でより長い議論を行います。</p>
+
+<h2>文字列への挿入</h2>
+
+<p>CoffeeScriptはRuby式の文字列への挿入をJavaScriptに対し追加しています。ダブルクォートで括った文字列に対しては<code>#{}</code>タグを含むことができます。その中に文字列に対して挿入される式を記述します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>favourite_color = "Blue. No, yel..."
+question = "Bridgekeeper: What... is your favourite color?
+            Galahad: #{favourite_color}
+            Bridgekeeper: Wrong!
+            "
+</code></pre>
+
+<p>上の例を見てわかります通り、複数行に渡る文字列もまた可能です。各行に<code>+</code>を置く必要はありません。</p>
+
+<h2>ループと内包表記</h2>
+
+<p>JavaScriptの配列の繰り返しはとても古風な文法でした。C言語のようなより古い言語を思い出させ、現在のオブジェクト指向言語とは異なります。ES5の<code>forEach()</code>の登場により状況はいくらか改善されました。しかしそれでも毎回関数呼出を必要とし、そのために遅いものとなっています。再びCoffeeScriptが美しい文法でその助けとなります。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>for name in ["Roger", "Roderick", "Brian"]
+  alert "Release #{name}"
+</code></pre>
+
+<p>もし繰り返しのインデックスが必要なら、もう1つの引数を渡すだけです。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>for name, i in ["Roger the pickpocket", "Roderick the robber"]
+  alert "#{i} - Release #{name}"
+</code></pre>
+
+<p>後置形式を用いることで1行で繰返すことも可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>release prisoner for prisoner in ["Roger", "Roderick", "Brian"]
+</code></pre>
+
+<p>Pythonの内包表記のように、フィルタリングを行うことも可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>prisoners = ["Roger", "Roderick", "Brian"]
+release prisoner for prisoner in prisoners when prisoner[0] is "R"
+</code></pre>
+
+<p>内包表記を用いてオブジェクトのプロパティについて繰り返しを行うことも可能です。<code>in</code>キーワードの代わりに<code>of</code>を使用して下さい。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>names = sam: seaborn, donna: moss
+alert("#{first} #{last}") for first, last of names
+</code></pre>
+
+<p>CoffeeScriptが持つローレベルなループは<code>while</code>のみです。JavaScriptの<code>while</code>と同じような動作をします。しかし追加の利点として結果の配列を返します。つまり<code>Array.prototype.map()</code>関数と同じようにです。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>num = 6
+minstrel = while num -= 1
+  num + " Brave Sir Robin ran away"
+</code></pre>
+
+<h2>配列</h2>
+
+<p>CoffeeScriptは配列の範囲(region)を用いたスライスについてRubyからヒントを得ています。範囲は2つの数値から作られます。最初と最後の位置を示す2つの数値は<code>..</code>か<code>...</code>で区切られます。もし範囲の前に何も無い場合にはCoffeeScriptはそれを配列に変換します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>range = [1..5]
+</code></pre>
+
+<p>しかし、もし範囲が変数の直後に置かれたならCoffeeScriptはそれを<code>slice()</code>メソッドの呼出に変換します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>firstTwo = ["one", "two", "three"][0..1]
+</code></pre>
+
+<p>上の例では範囲は新しい配列を返します。元の配列の最初の2つの要素のみを持つ配列です。同じ文法を配列の一部を他の配列で置換することにも使えます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>numbers = [0..9]
+numbers[3..5] = [-3, -4, -5]
+</code></pre>
+
+<p>便利なのはJavaScriptでは<code>slice()</code>を文字列に対しても呼ぶことが可能なことです。そのため範囲を文字列に対して使用することで部分文字列を返すことが可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>my = "my string"[0..2]
+</code></pre>
+
+<p>JavaScriptでは配列の中に値が存在するか確認することはとても面倒でした。特に<code>indexOf()</code>が全てのブラウザ間においてサポートされている訳ではなかったからです。(IE、君のことを言っているんだよ)。CoffeeScripitはこれを<code>in</code>演算子で解決します。次の例をご覧下さい。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>words = ["rattled", "roudy", "rebbles", "ranks"]
+alert "Stop wagging me" if "ranks" in words
+</code></pre>
+
+<h2>エイリアス(別名)と存在確認演算子</h2>
+
+<p>CoffeeScriptはいくつかの便利なエイリアスをタイピングの量を減らすために利用できます。そのうちの1つは<code>@</code>です。これは<code>this</code>のエイリアスです。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>@saviour = true
+</code></pre>
+
+<p>もう1つは<code>::</code>です。これは<code>prototype</code>の別名です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>User::first = -&gt; @records[0]
+</code></pre>
+
+<p>JavaScriptでは<code>if</code>を<code>null</code>チェックに用いることは普通です。しかし空文字列と0が共に<code>false</code>に変換されることが落とし穴として存在し、あなたを陥れます。CoffeeScriptの存在確認演算子である<code>?</code>は変数が<code>null</code>でないか、<code>undefined</code>でなければtrueを返します。Rubyの<code>nil?</code>と同様です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>praise if brian?
+</code></pre>
+
+<p>これは<code>||</code>演算子の代わりにも使えます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>velocity = southern ? 40
+</code></pre>
+
+<p>もし<code>null</code>チェックをプロパティにアクセスする前に行う場合、存在確認演算子をその前に置くだけでスキップすることが可能です。これはActive Supportの<a href="http://guides.rubyonrails.org/active_support_core_extensions.html#try"><code>try</code></a>メソッドに似ています。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>blackKnight.getLegs()?.kick()
+</code></pre>
+
+<p>同様に、プロパティが実際に関数であり呼出可能かチェックすることが括弧の直前に存在確認演算子を置くことで可能です。もしプロパティが存在しないか、関数ではない場合、呼出は行われません。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>blackKnight.getLegs().kick?()
+</code></pre>
+  </div>
+</div>
+</body>
+</html>

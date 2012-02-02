@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>The Little Book on CoffeeScript - {{name}}</title>
+<link rel="stylesheet" href="site/site.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="site/highlight.css" type="text/css" charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>      
+<script src="site/highlight.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/coffee-script.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/preview.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+  hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="container">
+  <header>
+    <h1><a href="index.html">The Little Book on CoffeeScript</a></h1>
+  </header>
+  
+  <div id="content">
+<div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
+
+<h1>CoffeeScriptに共通なイディオム</h1>
+
+<p>各言語には慣用句や慣習があります。CoffeeScriptも例外ではありません。この章ではそれらの規約を説明し、JavaScriptとCoffeeScriptの比較をいくつかご紹介することでこの言語の実践的なセンスを得て頂きます。</p>
+
+<h2>Each</h2>
+
+<p>JavaScriptでは配列の全てのアイテムに対し繰返しを行う場合、新しく追加された<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach"><code>forEach()</code></a>関数を用いるか、古いC言語のスタイルである<code>for</code>ループを用いることができました。もしECMAScript 5で紹介されたJavaScriptの最新の機能を用いる計画でしたら、私は古いブラウザもサポートするために<a href="https://github.com/kriskowal/es5-shim">shim</a>をページに入れておくことをお勧めします。</p>
+
+<pre><code>for (var i=0; i &lt; array.length; i++)
+  myFunction(array[i]);
+
+array.forEach(function(item, i){
+  myFunction(item)
+});
+</code></pre>
+
+<p><code>forEach()</code>の文法は簡潔で読み易いものですが、配列の個々の繰り返しにおいてコールバック関数が実行されるための不利益を被ります。つまり同等な<code>for</code>ループに比べると遅くなります。CoffeeScriptではどうなるか見てみましょう。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>myFunction(item) for item in array
+</code></pre>
+
+<p>読み易く簡潔な文法です。あなたも同意されることを疑いません。そしてこれの良いところは裏側では<code>for</code>ループにコンパイルされることです。つまりCoffeeScriptの文法は<code>forEach()</code>と同じ表現力を持ちながら、パフォーマンスやshimの必要性といった警告がありません。</p>
+
+<h2>Map</h2>
+
+<p><code>forEach()</code>と同じように、ES5は自然なmap関数も持っています。以前の<code>for</code>ループに比べより簡潔な文法を持っています。すなわち<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/map"><code>map()</code></a>です。残念なことにこれも<code>forEach()</code>と同じ警告を受けています。実行速度が関数呼出のために大きく劣っているのです。</p>
+
+<pre><code>var result = []
+for (var i=0; i &lt; array.length; i++)
+  result.push(array[i].name)
+
+var result = array.map(function(item, i){
+  return item.name;
+});
+</code></pre>
+
+<p>文法の章で説明したとおり、CoffeeScriptの内包表記は<code>map()</code>と同じ処理を行うことが可能です。内包表記を括弧で囲んでいることに注意して下さい。それはあなたが期待したmapを実行した結果配列を得ることを確実にするのに<strong>とても重要</strong>です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>result = (item.name for item in array)
+</code></pre>
+
+<h2>選択</h2>
+
+<p>同様に、ES5は配列を縮約するのに便利な関数、<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/filter"><code>filter()</code></a>を持っています。</p>
+
+<pre><code>var result = []
+for (var i=0; i &lt; array.length; i++)
+  if (array[i].name == "test")
+    result.push(array[i])
+
+result = array.filter(function(item, i){
+  return item.name == "test"
+});
+</code></pre>
+
+<p>CoffeeScriptの基本的文法は<code>when</code>キーワードをアイテムを比較しながらフィルタリングするのに用います。裏側では<code>for</code>ループが生成されています。実行の全体は無名関数の中で行なわれ、スコープが漏れることや変数名の衝突を防ぎます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>result = (item for item in array when item.name is "test")
+</code></pre>
+
+<p>括弧を絶対に忘れないで下さい。でなければ<code>result</code>は配列の最後の要素になるでしょう。
+CoffeeScriptの内包表記はとても自由度が高く次の例のようにとても強力な選択を行うことを可能にします。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>passed = []
+failed = []
+(if score &gt; 60 then passed else failed).push score for score in [49, 58, 76, 82, 88, 90]
+
+# または
+passed = (score for score in scores when score &gt; 60)
+</code></pre>
+
+<p>もし内包表記が長すぎる場合には複数行に分けることが可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>passed = []
+failed = []
+for score in [49, 58, 76, 82, 88, 90]
+  (if score &gt; 60 then passed else failed).push score
+</code></pre>
+
+<h2>含む</h2>
+
+<p>配列の中に値が存在するかを確認するには通常は<code>indexOf()</code>を用います。しかしInternet Explorerがそれを実装していないがために、うんざりすることですが今でも代替法が必要です。</p>
+
+<pre><code>var included = (array.indexOf("test") != -1)
+</code></pre>
+
+<p>CoffeeScriptはPythonプログラマなら気付くであろうこれに対する素敵な代替法を持っています。つまり<code>in</code>です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>included = "test" in array
+</code></pre>
+
+<p>裏側ではCoffeeScriptは配列の中に値があるかを確認するのに<code>Array.prototype.indexOf()</code>を使用しています。そしてもし必要ならその代替を利用しています。残念なことですがこれは同じ<code>in</code>という文法が文字列に対しては動作しないことを意味します。<code>indexOf()</code>を使う方法に戻って、結果が<code>-1</code>でないか確認します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>included = "a long test string".indexOf("test") isnt -1
+</code></pre>
+
+<p>またはより良い方法として、ビット演算をハイジャックして<code>-1</code>との比較をしなくてもすむようにします
+<span class="csscript"></span></p>
+
+<pre><code>string   = "a long test string"
+included = !!~ string.indexOf "test"
+</code></pre>
+
+<h2>プロパティの繰り返し</h2>
+
+<p>JavaScriptでプロパティの塊について繰返す場合には<code>in</code>演算子を用いました。次の例をご覧下さい。</p>
+
+<pre><code>var object = {one: 1, two: 2}
+for(var key in object) alert(key + " = " + object[key])
+</code></pre>
+
+<p>しかし、前のセクションで見たとおり、CoffeeScriptは既に<code>in</code>を配列に用いるのに予約済みです。その代わりに、演算子は<code>of</code>と名前を変えこのように使えます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>object = {one: 1, two: 2}
+alert("#{key} = #{value}") for key, value of object
+</code></pre>
+
+<p>ご覧のように、プロパティの名前とその値の両方に変数を指定可能です。より便利になりました。</p>
+
+<h2>最小/最大</h2>
+
+<p>このテクニックはCoffeeScript特有のものではありません。しかし便利なのでとにかく紹介してみましょう。<code>Math.max</code>と<code>Math.min</code>は複数の引数を取ります。そのため<code>...</code>を用いることで配列を渡し、配列の中の最大値と最小値を得ることができます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>Math.max [14, 35, -7, 46, 98]... # 98
+Math.min [14, 35, -7, 46, 98]... # -7
+</code></pre>
+
+<p>このトリックが本当に大きな配列では失敗してしまうのは仕方がありません。ブラウザは関数に渡せる引数の数に制限があります。</p>
+
+<h2>複数の引数</h2>
+
+<p>上の<code>Math.max</code>の例では<code>...</code>を使い配列を解体し複数の引数として<code>max</code>に渡しました。裏側ではCoffeeScriptは関数呼出を<code>apply()</code>を使うように変換し、配列が複数の引数として<code>max</code>に渡るようにしています。この機能を他にも使うことが可能です。例えば関数呼出を委任(proxy)するには次のようにします。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>Log =
+  log: -&gt;
+    console?.log(arguments...)
+</code></pre>
+
+<p>または引数をパスする前に変えてしまうことも可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>Log =
+  logPrefix: "(App)"
+
+  log: (args...) -&gt;
+    args.unshift(@logPrefix) if @logPrefix
+    console?.log(args...)
+</code></pre>
+
+<p>しかし次のことは心に留めておいてください。CoffeeScriptは自動的に関数の実行コンテキストをその関数が実行されるオブジェクトに設定します。上の例では<code>console</code>になるでしょう。もし指定したコンテキストを設定したい場合には<code>apply()</code>を手動で呼ばなければなりません。</p>
+
+<h2>And/or</h2>
+
+<p>CoffeeScriptスタイルガイドは<code>or</code>は<code>||</code>より好ましく、<code>and</code>は<code>&amp;&amp;</code>より好ましいと指示しています。私はそれが何故だかわかります。前者のほうがより読み易いといったところです。それでもなお2つのスタイルは同じ結果をもたらします。</p>
+
+<p>このより英語らしいスタイルという優先度は<code>==</code>の代わりに<code>is</code>、<code>!=</code>の代わりに<code>isnt</code>ということにも当て嵌ります。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>string = "migrating coconuts"
+string == string # true
+string is string # true
+</code></pre>
+
+<p>CoffeeScriptへのとても嬉しい拡張の1つは<code>or equals</code>です。これはRuby使いなら<code>||=</code>と認識するでしょう。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>hash or= {}
+</code></pre>
+
+<p>もしhashが<code>false</code>と評価されるならそれには空のオブジェクトが代入されます。ここで重要なのはこの式は<code>0</code>、<code>""</code>、<code>null</code>もまたfalseと判定することです。もしそれがあなたの意図することでなければCoffeeScriptの存在確認演算子を用いるべきでしょう。そちらは<code>hash</code>が<code>undefined</code>であるか<code>null</code>である場合のみ作動します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>hash ?= {}
+</code></pre>
+
+<h2>割当の解体</h2>
+
+<p>割当の解体は任意の深さの配列とオブジェクトのネストに用いられ、奥にネストされたプロパティを取り出すのを手助けします。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>someObject = { a: 'value for a', b: 'value for b' }
+{ a, b } = someObject
+console.log "a is '#{a}', b is '#{b}'"
+</code></pre>
+
+<p>これはNodeのアプリケーションにおいてモジュールを必要とする場合に特に有効です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>{join, resolve} = require('path')
+
+join('/Users', 'Alex')
+</code></pre>
+
+<h2>外部ライブラリ</h2>
+
+<p>外部ライブラリを利用することはCoffeeScriptのライブラリの関数を呼ぶのと全く同じです。なぜなら全ては最後にはJavaScriptへとコンパイルされるからです。CoffeeScriptと<a href="http://jquery.com">jQuery</a>を同時に利用するのは特にエレガントです。jQueryのAPIには大量のコールバックがあるからです。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code># ローカルの別名を使う
+$ = jQuery
+
+$ -&gt;
+  # DOMコンテンツのロード終了後
+  $(".el").click -&gt;
+    alert("Clicked!")
+</code></pre>
+
+<p>全てのCoffeeScriptの出力は無名関数にてラップされるため、ローカルの<code>$</code>を<code>jQuery</code>のエイリアスとして設定可能です。これによりjQueryの衝突回避モードが許可されていて<code>$</code>が再定義されていても私達のスクリプトは望んだとおりに機能することを確実にします。</p>
+
+<h2>プライベート変数</h2>
+
+<p>CoffeeScriptの<code>do</code>キーワードは関数を直ぐに実行しますが、スコープをカプセル化し、変数を守るのに最高の方法です。下の例では、<code>classToType</code>という変数を無名関数のコンテキストで定義し、<code>do</code>により直ぐに実行しています。その無名関数は2つ目の無名関数を返します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code># 関数をすぐに実行する
+type = do -&gt;
+  classToType = {}
+  for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
+    classToType["[object " + name + "]"] = name.toLowerCase()
+
+  # 関数を返す
+  (obj) -&gt;
+    strType = Object::toString.call(obj)
+    classToType[strType] or "object"
+</code></pre>
+
+<p>つまり、<code>classToType</code>は完全にプライベートで実行中の無名関数の外側からは二度と参照することはできません。このパターンはスコープをカプセル化し、変数を隠すのに最適です。</p>
+  </div>
+</div>
+</body>
+</html>

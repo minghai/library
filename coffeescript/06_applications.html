@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>The Little Book on CoffeeScript - {{name}}</title>
+<link rel="stylesheet" href="site/site.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="site/highlight.css" type="text/css" charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>      
+<script src="site/highlight.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/coffee-script.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/preview.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+  hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="container">
+  <header>
+    <h1><a href="index.html">The Little Book on CoffeeScript</a></h1>
+  </header>
+  
+  <div id="content">
+<div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
+
+<h1>アプリケーションを作成する</h1>
+
+<p>ここまでで文法の概要について学びました。ここからは実際にCoffeeScriptアプリケーションを構築しましょう。この章の狙いは初心者や熟練の技術者に限らず、全てのCoffeeScript開発者にとって有益なものになることです。本当に、JavaScriptの開発者にとっても適切なものとなるはずです。</p>
+
+<p>幾つかの原因により、開発者がクライアントサイドJavaScriptアプリケーションを構築する時、パターンと規約を試し、テストはするもののそれらはしばしば窓から飛んでいってしまい、最終的な結果はひどいスパゲッティで、保守不可能にこんがらがったJavaScriptになります。私は常にアプリケーションアーキテクチャがどれだけ重要かを強調しています。もしあなたがJavaScript/CoffeeScriptを単純なフォームの妥当性確認を越えて用いるのであれば、<a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>のようなアプリケーション構造を実装するべきです。</p>
+
+<p>保守可能な巨大アプリケーションを実装するための秘密は巨大なアプリケーションを作らないことです。つまり言い換えれば、一連のモジュールとして分割されたコンポーネントを作るのです。アプリケーションロジックは出来る限り一般的にし、適切に抽象化します。最後にロジックを分割し、ビュー、モデル、コントローラ(MVC)に分けます。MVCの実装はこの章の範囲を越えています。MVCについては私の本、<a href="http://oreilly.com/catalog/9781449307530/">JavaScript Web Applications</a>をチェックして、<a href="http://documentcloud.github.com/backbone/">Backbone</a> や <a href="https://github.com/maccman/spine">Spine</a>のようなフレームワークを利用して下さい。ここではそうではなくCommonJSモジュールを用いてアプリケーションの構造化を説明します。</p>
+
+<h2>構造とCommonJS</h2>
+
+<p>さて、CommonJSモジュールとは一体何でしょうか？もしあなたが<a href="http://nodejs.org/">NodeJS</a>を以前に使ったことがあるのなら、あなたはCommonJSを恐らく気付かずに使ったことがあります。CommonJSモジュールは最初にサーバサイドJavaScriptライブラリを書くために開発されました。ローディング時間や名前空間、スコープの問題に向き合うためにです。CommonJSは全てのJavaScript実装の間で互換性を保持するようにするための共通フォーマットでした。その狙いは<a href="http://www.mozilla.org/rhino/">Rhino</a>向けのライブラリがnodeでも動くことでした。やがてこのアイデアはブラウザに向けられました。そして今私達は<a href="http://requirejs.org">RequireJS</a> や <a href="https://github.com/jbrantly/yabble">Yabble</a>のような素晴しいライブラリをクライアントサイドでモジュールを用いるために持っている訳です。</p>
+
+<p>実際に、モジュールはあなたのコードがローカルネームスペース(コードカプセル化)の中で動くことを保障します。他のモジュールを<code>require()</code>関数で読むことができます。そして<code>module.exports</code>を通してモジュールプロパティを外部に公開することができます。それではそのことについてもう少し掘り下げてみましょう。</p>
+
+<h3>ファイルを要求(require)する</h3>
+
+<p>他のモジュールやライブラリ内で<code>require()</code>を用いてロードすることが可能です。単純にモジュールの名前を渡すだけです。もしロードパスの中に存在すれば、そのモジュールを表すオブジェクトを返します。次の例をご覧下さい。</p>
+
+<pre><code>User = require("models/user")
+</code></pre>
+
+<p>同期的なrequireのサポートは議論の余地のある問題です。しかし多くは主流のローダーライブラリと最新のCommonJSの<a href="http://wiki.commonjs.org/wiki/Modules/AsynchronousDefinition">提案</a>により解決されています。もしあなたが私の支持する以下のStichとの道とは別の道を選択することを決められたのであれば、それがあなたが良く理解しなければならないものとなるでしょう。</p>
+
+<h3>プロパティを外部に公開する</h3>
+
+<p>デフォルトでは、モジュールはプロパティを1つも公開しません。中身は<code>require()</code>の呼出に対し、完全に不可視です。もしあるプロパティがあなたのモジュールからアクセス可能であって欲しいと思った場合、<code>module.exports</code>を用いて設定する必要があります。</p>
+
+<pre><code># random_module.js
+module.exports.myFineProperty = -&gt;
+  # 何か
+</code></pre>
+
+<p>これでこのモジュールがrequireされる度に<code>myFineProperty</code>は公開されます。</p>
+
+<pre><code>myFineProperty = require("random_module").myFineProperty
+</code></pre>
+
+<h2>Stitch: 縫い上げよう</h2>
+
+<p>あなたのコードをCommonJSモジュールとして形式化することは全く問題がありません。しかし実際にどうやってこれをクライアントで実行するのでしょうか？私の選択した方法はあまり聞き慣れない<a href="https://github.com/sstephenson/stitch">Stitch</a>ライブラリです。StichはSam Stephensonにより開発され、色々な物の中でも<a href="http://www.prototypejs.org">Prototype.js</a>の影響を受け、モジュールの問題をとてもエレガントに解決するので私は喜びのダンスを踊りたくなります！依存性を動的に解決するのではなく、Stichは単純にあなたのJavaScriptファイル全てを1つに結合します。それらをCommonJSの魔法で包みます。あぁ、 そういえばこれはお伝えしましたでしょうか？CoffeeScriptやJSテンプレート、<a href="http://lesscss.org">LESS CSS</a> それに <a href="http://sass-lang.com">Sass</a>ファイルもコンパイルします！</p>
+
+<p>物事には順序があります。まず<a href="http://nodejs.org/">node.js</a> と <a href="http://npmjs.org/">npm</a>をまだお持ちでないのならインストールする必要があります。私達はこれからこの章を通してそれらを使用します。</p>
+
+<p>それでは私達のアプリケーションの構造を作りましょう。もし<a href="https://github.com/maccman/spine">Spine</a>をお使いでしたら<a href="http://github.com/maccman/spine.app">Spine.App</a>を用いてこれを自動化できます。そうでなければこれは手動で行わねばなりません。私は通常、<code>app</code>フォルダを全てのアプリケーション特有のコードのために用意します。そして<code>lib</code>フォルダを一般的なライブラリのために作ります。他の物は全て静的なリソースも含めて<code>public</code>ディレクトリに入れましょう。</p>
+
+<pre><code>app
+app/controllers
+app/views
+app/models
+app/lib
+lib
+public
+public/index.html
+</code></pre>
+
+<p>それではStichサーバを実際に起動します。<code>index.coffee</code>という名のファイルを作り、次のスクリプトを入力してください。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>require("coffee-script")
+stitch  = require("stitch")
+express = require("express")
+argv    = process.argv.slice(2)
+
+package = stitch.createPackage(
+  # Stitchに自動的に結合して欲しいパスを指定する
+  paths: [ __dirname + "/app" ]
+
+  # ベースとなるライブラリを指定する
+  dependencies: [
+    # __dirname + '/lib/jquery.js'
+  ]
+)
+app = express.createServer()
+
+app.configure -&gt;
+  app.set "views", __dirname + "/views"
+  app.use app.router
+  app.use express.static(__dirname + "/public")
+  app.get "/application.js", package.createServer()
+
+port = argv[0] or process.env.PORT or 9294
+console.log "Starting server on port: #{port}"
+app.listen port
+</code></pre>
+
+<p>いくつかの依存ライブラリ、<code>coffee-script</code>, <code>stich</code>, そして<code>express</code>が並べられているのが見えますでしょうか？ 我々は<code>package.json</code>ファイルを作成し、これらの依存性を記述せねばなりません。そうすることでnpmがそれらを取り上げることができます。我々の<code>./package.js</code>ファイルは次のようになります。</p>
+
+<pre><code>{
+  "name": "app",
+  "version": "0.0.1",
+  "dependencies": { 
+    "coffee-script": "~1.1.2",
+    "stitch": "~0.3.2",
+    "express": "~2.5.0",
+    "eco": "1.1.0-rc-1"
+  }
+}
+</code></pre>
+
+<p>それではnpmを用いて依存ライブラリをインストールしましょう。</p>
+
+<pre><code>npm install .
+npm install -g coffee-script
+</code></pre>
+
+<p>OK.もうそこまで来ました。それでは次を実行します。</p>
+
+<pre><code>coffee index.coffee
+</code></pre>
+
+<p>うまくいけばStitchサーバが立ち上がるでしょう。それでは先に進み<code>app</code>フォルダの中の<code>app.coffee</code>スクリプトを与えてテストしてみましょう。このファイルは私達のアプリケーションを起動するものになります。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>module.exports = App =
+  init: -&gt;
+    # アプリケーションを起動する
+</code></pre>
+
+<p>次にメインページとなる<code>index.html</code>を作成します。もし我々がシングルページアプリを作るのならば、ユーザがアクセスする唯一のページとなるでしょう。これは静的なリソースですから<code>public</code>の下に置きます。</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=utf-8&gt;
+  &lt;title&gt;Application&lt;/title&gt;
+  &lt;!-- Stitchのメインファイルを必要とする --&gt;
+  &lt;script src="/application.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" charset="utf-8"&gt;
+    document.addEventListener("DOMContentLoaded", function(){
+      var App = require("app");
+      App.init();
+    }, false);
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>ページがロードされた時、<em>DOMContentLoaded</em>イベントコールバックは<code>app.coffee</code>スクリプトをrequireします。(それは自動的にコンパイルされます。) 次に<code>init()</code>関数を実行します。あるべきものはそれだけです。私達は既にCommonJSモジュールを起動して実行しています。HTTPサーバとCoffeeScriptコンパイラもです。例えばもしモジュールをインクルードしたい場合、<code>require()</code>を呼ぶだけです。新しいクラス、<code>user</code>を作り、<code>app.coffee</code>から参照してみましょう。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code># app/models/user.coffee
+module.exports = class User
+  constructor: (@name) -&gt;
+
+# app/app.coffee
+User = require("models/user")
+</code></pre>
+
+<h2>JavaScriptテンプレート</h2>
+
+<p>ロジックをクライアントサイドに動かしたい場合、あなたは間違いなく何らかのテンプレートライブラリを必要とするでしょう。JavaScriptテンプレートはサーバのテンプレートとほぼ同じものです。例えばRubyのERBやPythonのテキスト内挿法のようなものでもちろんクライアントサイドでも動作します。世の中には数多くのテンプレートライブラリがあります。そのため私はあなたにいくらかの調査と試用を行うことをお勧めします。Stitchはデフォルトでは<a href="https://github.com/sstephenson/eco">Eco</a>テンプレートを内部に持っています。</p>
+
+<p>JavaScriptテンプレートはサーバサイドのそれと似たようなものです。HTMLの中にテンプレートタグを挿入し、描画の間にそれらのタグが評価され置換されます。<a href="https://github.com/sstephenson/eco">Eco</a>テンプレートの優れている点はテンプレートタグが実はCoffeeScriptで記述されていることです。</p>
+
+<p>例を見てみましょう</p>
+
+<pre><code>&lt;% if @projects.length: %&gt;
+  &lt;% for project in @projects: %&gt;
+    &lt;a href="&lt;%= project.url %&gt;"&gt;&lt;%= project.name %&gt;&lt;/a&gt;
+    &lt;p&gt;&lt;%= project.description %&gt;&lt;/p&gt;
+  &lt;% end %&gt;
+&lt;% else: %&gt;
+  No projects
+&lt;% end %&gt;
+</code></pre>
+
+<p>ご覧のとおり、文法は際立って直接的です。ただ<code>&lt;%</code>タグを使って式を評価し、<code>&lt;%=</code>タグは表示のために用います。テンプレートタグの一部のリストは次のとおりです。</p>
+
+<ul>
+<li><p><code>&lt;% expression %&gt;</code> <br />
+CoffeeScriptの式を評価する。その返り値はプリントしない。</p></li>
+<li><p><code>&lt;%= expression %&gt;</code> <br />
+CoffeeScriptの式を評価する。その返り値をエスケープし、プリントする。</p></li>
+<li><p><code>&lt;%- expression %&gt;</code> <br />
+CoffeeScriptの式を評価し、その返り値をエスケープせずにプリントする。</p></li>
+</ul>
+
+<p>任意のCoffeeScriptの式をテンプレートタグの中で使用することが可能ですが、気をつけることが1つだけあります。CoffeeScriptは空白に敏感です。しかしEcoテンプレートはそうではありません。従ってインデントされたCoffeeScriptブロックを始めるEcoテンプレートタグはコロンを追加せねばなりません。インデントブロックの終わりを示すには特別なタグ<code>&lt;% end %&gt;</code>を使用します。次の例をご覧下さい。</p>
+
+<pre><code>&lt;% if @project.isOnHold(): %&gt;
+  On Hold
+&lt;% end %&gt;
+</code></pre>
+
+<p><code>if</code>と<code>end</code>のタグを行を分けて書く必要はありません。</p>
+
+<pre><code>&lt;% if @project.isOnHold(): %&gt; On Hold &lt;% end %&gt;
+</code></pre>
+
+<p>ご期待通り、1行で書くための後置形式も利用可能です。</p>
+
+<pre><code>&lt;%= "On Hold" if @project.isOnHold() %&gt;
+</code></pre>
+
+<p>さて文法については取っ掛かりを得ました。<code>views/users/show.eco</code>の中にEcoテンプレートを定義しましょう。</p>
+
+<pre><code>&lt;label&gt;Name: &lt;%= @name %&gt;&lt;/label&gt;
+</code></pre>
+
+<p>Stichは自動的に私達のテンプレートをコンパイルして<code>application.js</code>に含めてしまいます。そして私達のアプリケーションのコントローラではテンプレートをrequireすることがモジュールのように可能で、必要なデータを渡して実行することができます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>require("views/users/show")(new User("Brian"))
+</code></pre>
+
+<p>私達の<code>app.coffee</code>ファイルは以下のようになっているはずです。テンプレートを描画し、ドキュメントがロードされた時にページに対して追加します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>User = require("models/user")
+
+App =
+  init: -&gt;
+    template = require("views/users/show")
+    view     = template(new User("Brian"))
+
+    # 明らかにこれはjQueryを用いて綺麗にできるでしょう
+    element = document.createElement("div")
+    element.innerHTML = view
+    document.body.appendChild(element)
+
+module.exports = App
+</code></pre>
+
+<p><a href="http://localhost:9294/">アプリケーション</a>を開いて試してみてください。願わくばこのチュートリアルがクライアントサイドのCoffeeScriptアプリケーションをどう構造化するについて良いアイデアを与えていることを期待します。次のステップとして、私はクライアントサイドフレームワークをチェックすることをお勧めします。例えば<a href="http://documentcloud.github.com/backbone/">Backbone</a> or <a href="http://spinejs.com">Spine</a>などです。それらは基本的なMVC構造を与え、あなたをより面白い仕事へと解放します。</p>
+
+<h2>ボーナス - 30秒でHerokuへデプロイ</h2>
+
+<p><a href="http://heroku.com">Heroku</a>は信じられないほど最高なWebホストで全てのサーバを管理し、スケールし、あなたがエキサイティングな物(素晴しいJavaScriptアプリケーションを構築すること)と共に乗り込むことを可能にします。このチュートリアルを行うにはHerokuのアカウントを必要とします。しかしうれしいことにHerokuのベーシックプランは完全に無料です。元々はRubyのホストでしたが、Herokuは最近、Cedarスタックをリリースし、それにはnodeサポートを含んでいます。</p>
+
+<p>最初に<code>Procfile</code>を作ります。これはHerokuに我々のアプリケーションについて伝えます。</p>
+
+<pre><code>echo "web: coffee index.coffee" &gt; Procfile
+</code></pre>
+
+<p>まだお済みでなければあなたのアプリケーションに対しローカルgitリポジトリを作成して下さい。</p>
+
+<pre><code>git init
+git add .
+git commit -m "First commit"
+</code></pre>
+
+<p>それではアプリケーションをデプロイしましょう。<code>heroku</code>コマンドを使います。(まだインストールしていなければする必要があります。)</p>
+
+<pre><code>heroku create myAppName --stack cedar
+git push heroku master
+heroku open
+</code></pre>
+
+<p>以上です！ 本当にこれだけなんです。nodeアプリケーションをホスティングすることはこれ以上には簡単にならないでしょう。</p>
+
+<h2>追加のライブラリ</h2>
+
+<p><a href="https://github.com/sstephenson/stitch">Stitch</a> と <a href="https://github.com/sstephenson/eco">Eco</a>だけがCoffeeScriptとnodeのアプリケーションを作るのに利用可能なライブラリではありません。他にも各種あります。</p>
+
+<p>例えばテンプレートに関しては<a href="http://mustache.github.com">Mustache</a>, <a href="http://jade-lang.com">Jade</a> または純粋にCoffeeScriptを使ってHTMLを書く<a href="http://coffeekup.org">CoffeeKup</a>もあります。</p>
+
+<p>アプリケーションの提供に関しては<a href="http://github.com/maccman/hem">Hem</a>は良い選択です。CommonJSとNPMモジュールの両方をサポートし、CoffeeScriptのMVCフレームワークである<a href="http://spinejs.com">Spine</a>とシームレスに結合できます。<a href="https://github.com/substack/node-browserify">node-browsify</a>も同様のプロジェクトです。もし<a href="http://expressjs.com/">express</a>を用いて低レベルの結合をしたい場合にはTrevor Burnhamの <a href="https://github.com/TrevorBurnham/connect-assets">connect-assets</a>もあります。</p>
+
+<p>CoffeeScriptのWebフレームワークプラグインの完全なリストは<a href="https://github.com/jashkenas/coffee-script/wiki/Web-framework-plugins">project's wiki</a>にあります。</p>
+  </div>
+</div>
+</body>
+</html>

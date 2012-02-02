@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>The Little Book on CoffeeScript - {{name}}</title>
+<link rel="stylesheet" href="site/site.css" type="text/css" charset="utf-8">
+<link rel="stylesheet" href="site/highlight.css" type="text/css" charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>      
+<script src="site/highlight.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/coffee-script.js" type="text/javascript" charset="utf-8"></script>
+<script src="site/preview.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+  hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="container">
+  <header>
+    <h1><a href="index.html">The Little Book on CoffeeScript</a></h1>
+  </header>
+  
+  <div id="content">
+<div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
+
+<h1>クラス</h1>
+
+<p>JavaScriptのクラスは純粋主義者にとってニンニクがドラキュラに対して与えるものと同様な影響を持っていました。とはいえ、正直に言ってあなたがそのような傾倒をお持ちでしたらCoffeeScriptの本を呼んだりはしないでしょう。しかし、クラスは他の言語と同じようにJavaScriptでもとても便利であると判明しました。そしてCoffeeScriptは素晴しい抽象化を提供します。</p>
+
+<p>その裏では、CoffeeScriptはJavaScriptのネイティブなprototypeをクラスを作成するのに用いています。少しの構文糖を静的なプロパティの継承とコンテキストの永続化のために用いています。開発者としてのあなたに見えるのは<code>class</code>キーワードだけです。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+</code></pre>
+
+<p>この上の例では<code>Animal</code>がクラス名であり、かつ結果としてインスタンスの作成に用いる変数です。裏側ではCoffeeScriptはコンストラクタ関数を用いており、クラスのインスタンスを<code>new</code>演算子を用いて作成することが可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>animal = new Animal
+</code></pre>
+
+<p>コンストラクタ(インスタンス化において実行される関数)を定義することは簡単です。<code>constructor</code>という名前の関数を使用してください。これはRubyの<code>initialize</code>やPythonの<code>__init__</code>と同様です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  constructor: (name) -&gt;
+    @name = name
+</code></pre>
+
+<p>実はCoffeeScriptはインスタンスのプロパティ設定の一般的なパターンのために速記法を用意しています。引数の直前に<code>@</code>を置くことで、CoffeeScriptはコンストラクタの中では自動的に引数をインスタンスのプロパティに設定します。実際にはこの速記法はクラスの外の通常の関数でも使用可能です。下の例は先程の例と等価です。先程はインスタンスのプロパティを手で設定しています。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  constructor: (@name) -&gt;
+</code></pre>
+
+<p>期待どおりに、インスタンス化において渡される任意数の引数はコンストラクタ関数に渡されます。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>animal = new Animal("Parrot")
+alert "Animal is a #{animal.name}"
+</code></pre>
+
+<h2>インスタンスプロパティ</h2>
+
+<p>クラスにインスタンスプロパティを追加することはとても簡単です。オブジェクトにプロパティを追加する文法そのものです。ただプロパティがクラスの本体で正しくインデントされているかは注意してください。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  price: 5
+
+  sell: (customer) -&gt;
+
+animal = new Animal
+animal.sell(new Customer)
+</code></pre>
+
+<p>JavaScriptにおけるコンテキストの変更は嫌なものです。以前の文法の章でCoffeeScriptがファットアロー<code>=&gt;</code>を用いることで<code>this</code>の値を特有のコンテキストにロックするかを説明しました。関数がどのようなコンテキストの下に呼ばれようとも、関数が作成されたコンテキストの下で実行されます。つまりファットアローをインスタンスメソッドに用いることで、それが正しいコンテキストで実行されることを確認することができます。<code>this</code>は常に現在のインスタンスになります。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  price: 5
+
+  sell: =&gt;
+    alert "#{@price}シリングになります!"
+
+animal = new Animal
+$("#sell").click(animal.sell)
+</code></pre>
+
+<p>上の例でデモしたとおり、これはイベントコールバックにおいてとても便利です。通常は<code>sell()</code>関数は<code>#sell</code>要素の下で実行されます。しかし<code>sell()</code>に対しファットアローを用いることで正しいコンテキストが管理されていることを確認できます。<code>this.price</code>は<code>5</code>に等しくなります。</p>
+
+<h2>静的なプロパティ</h2>
+
+<p>クラスの(つまり静的な)プロパティはどうやって定義するのでしょうか？実はクラス定義の中では<code>this</code>はクラスオブジェクトを指しています。つまりクラスプロパティは<code>this</code>の上に直接設定することになります。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  this.find = (name) -&gt;      
+
+Animal.find("Parrot")
+</code></pre>
+
+<p>実際には、あなたも覚えておいででしょうが、CoffeeScriptには<code>this</code>を<code>@</code>で記述可能で、静的プロパティをより簡潔に記述可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  @find: (name) -&gt;
+
+Animal.find("Parrot")
+</code></pre>
+
+<h2>継承とsuper</h2>
+
+<p>何らかの形の継承が無ければ正しいクラスの実装にはならないでしょう。CoffeeScriptは失望させません。<code>extends</code>キーワードを用いて他のクラスを継承することが可能です。下の例では<code>Parrot</code>は<code>Animal</code>を拡張し、全てのインスタンスプロパティ、<code>alive()</code>等を継承しています。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  constructor: (@name) -&gt;
+
+  alive: -&gt;
+    false
+
+class Parrot extends Animal
+  constructor: -&gt;
+    super("Parrot")
+
+  dead: -&gt;
+    not @alive()
+</code></pre>
+
+<p>上の例でお気付きになられるでしょうが、ここでは<code>super()</code>キーワードを使いました。裏側ではクラスの親のprototypeの関数呼出に翻訳され、現在のコンテキストにて実行されます。この例では<code>Parrot.__super__.constructor.call(this, "Parrot");</code>になります。実際にこれはRubyやPythonで<code>super</code>を実行したのと同じ影響を持ち、オーバーライドされた関数を実行します。</p>
+
+<p><code>constructor</code>をオーバーライドしない限り、デフォルトではCoffeeScriptは親のコンストラクタをインスタンスが作成された時に実行します。</p>
+
+<p>CoffeeScriptはprotype形式の継承を用いて、自動的にクラスの全てのインスタンスプロパティを継承します。これはクラスが動的であることを示します。子が作成された後に親クラスにインスタンスプロパティを追加すればそのプロパティは全ての継承した子に伝播します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>class Animal
+  constructor: (@name) -&gt;
+
+class Parrot extends Animal
+
+Animal::rip = true
+
+parrot = new Parrot("Macaw")
+alert("This parrot is no more") if parrot.rip
+</code></pre>
+
+<p>しかし静的なプロパティはサブクラスにコピーされるのであり、インスタンスプロパティのようにプロトタイプを用いて継承されるのではないことは重要です。これはJavaScriptのプロトタイプアーキテクチャの実装の詳細によります。そして次善の策を探すのは難しい問題です。</p>
+
+<h2>ミックスイン</h2>
+
+<p>ミックスイン<a href="http://en.wikipedia.org/wiki/Mixin">Mixins</a>はCoffeeScriptの言語仕様としてサポートされたものではありません。しかし簡単に実装可能です。例として、2つの関数を考えます。<code>extend()</code>と<code>include()</code>はあるクラスにクラスとインスタンスのプロパティを別々に追加します。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>extend = (obj, mixin) -&gt;
+  obj[name] = method for name, method of mixin        
+  obj
+
+include = (klass, mixin) -&gt;
+  extend klass.prototype, mixin
+
+# Usage
+include Parrot,
+  isDeceased: true
+
+(new Parrot).isDeceased
+</code></pre>
+
+<p>ミックスインは継承が適切でない場合にモジュール間で共通なロジックを共有するのにとても良いパターンです。ミックスインの利点は継承が1つのクラスからしか継承できないのに対し、複数を取り込めることです。</p>
+
+<h2>クラスの拡張</h2>
+
+<p>ミックスインはとても格好良いです。しかしあまりオブジェクト指向ではありません。代わりとしてCoffeeScriptのクラスにミックスインを統合しましょう。<code>Module</code>と呼ばれるクラスを定義してミックスインサポートのために継承できるようにしましょう。<code>Module</code>は2つの静的関数を持ちます。<code>@extend()</code>と<code>@include()</code>で静的プロパティとインスタンスプロパティを個別に拡張するのに利用可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>moduleKeywords = ['extended', 'included']
+
+class Module
+  @extend: (obj) -&gt;
+    for key, value of obj when key not in moduleKeywords
+      @[key] = value
+
+    obj.extended?.apply(@)
+    this
+
+  @include: (obj) -&gt;
+    for key, value of obj when key not in moduleKeywords
+      # Assign properties to the prototype
+      @::[key] = value
+
+    obj.included?.apply(@)
+    this
+</code></pre>
+
+<p><code>moduleKeywords</code>変数まわりのちょっとしたダンスはミックスインがクラスを拡張した時にコールバックをサポートするためです。我々の<code>Module</code>クラスがどう動くか見てみましょう。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>classProperties = 
+  find: (id) -&gt;
+  create: (attrs) -&gt;
+
+instanceProperties =
+  save: -&gt; 
+
+class User extends Module
+  @extend classProperties
+  @include instanceProperties
+
+# Usage:
+user = User.find(1)
+
+user = new User
+user.save()
+</code></pre>
+
+<p>ご覧のとおり、我々は静的プロパティとして<code>find()</code>と<code>create()</code>を<code>User</code>クラスに追加しました。またインスタンスプロパティも<code>save()</code>を追加しました。
+モジュールが拡張されたときにはコールバックを得ますので静的、及びインスタンスプロパティを適用するプロセスはショートカット可能です。</p>
+
+<p><span class="csscript"></span></p>
+
+<pre><code>ORM = 
+  find: (id) -&gt;
+  create: (attrs) -&gt;
+  extended: -&gt;
+    @include
+      save: -&gt; 
+
+class User extends Module
+  @extend ORM
+</code></pre>
+
+<p>とてもシンプルでエレガントでしょう！</p>
+  </div>
+</div>
+</body>
+</html>
