@@ -1,0 +1,7 @@
+.DS_Store
+*~
+*.swp
+bundle/
+*.lock
+Rakefile
+.bundle/
