@@ -35,7 +35,7 @@ JavaScriptでは配列の全てのアイテムに対し繰返しを行う場合�
       return item.name;
     });
 
-文法の章で説明したとおり、CoffeeScriptの内包表記は`map()`と同じ処理を行うことが可能です。内包表記を括弧で囲んでいることに注意して下さい。それはあなたが期待したmapを実行した結果配列を得ることを確実にするのに**とても重要**です。
+文法の章で説明したとおり、CoffeeScriptの内包表記は`map()`と同じ処理を行うことが可能です。内包表記を括弧で囲んでいることに注意して下さい。それはあなたが期待したmapを実行した結果の配列を得ることを確実にするのに**とても重要**です。
 
 <span class="csscript"></span>
 
@@ -70,6 +70,7 @@ CoffeeScriptの内包表記はとても自由度が高く次の例のように�
     (if score > 60 then passed else failed).push score for score in [49, 58, 76, 82, 88, 90]
     
     # または
+    scores = [49, 58, 76, 82, 88, 90]
     passed = (score for score in scores when score > 60)
     
 もし内包表記が長すぎる場合には複数行に分けることが可能です。
