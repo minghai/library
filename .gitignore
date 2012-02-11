@@ -4,3 +4,9 @@
 coffeescript/Rakefile
 
 coffeescript/.gitignore
+
+coffeescript/.bundle/config
+
+coffeescript/Gemfile
+
+coffeescript/make_html
