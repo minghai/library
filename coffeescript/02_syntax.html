@@ -31,9 +31,11 @@
 
 <p>メタ的な意味で驚いたのはCoffeeScriptインタプリタ自身が実際にCoffeeScriptで書かれていたことでした。それは卵と鶏のパラドックスがついに解決したかに見えました！</p>
 
-<p>さて、それでは最初に基本的な事柄に取り掛かりましょう。CoffeeScriptにはセミコロンがありません。コンパイル時に自動的に追加してくれます。セミコロンはJavaScriptコミュニティにおいて、いくつかのおかしなインタプリタの挙動<a href="http://bonsaiden.github.com/JavaScript-Garden/#core.semicolon">behavior</a>により多くの議論の的でした。とにかく、CoffeeScriptはこの問題を単純にセミコロンを文法から消し、状況により追加することで解決しました。</p>
+<p>さて、それでは最初に基本的な事柄に取り掛かりましょう。CoffeeScriptにはセミコロンがありません。コンパイル時に自動的に追加してくれます。セミコロンはJavaScriptコミュニティにおいて、いくつかのおかしなインタプリタの<a href="http://bonsaiden.github.com/JavaScript-Garden/#core.semicolon">挙動</a>により多くの議論の的でした。とにかく、CoffeeScriptはこの問題を単純にセミコロンを文法から消し、裏側で必要に応じて追加することで解決しました。</p>
 
 <p>コメントはRubyのコメントと同じフォーマットです。ハッシュ文字(<code>#</code>:通称、シャープ)で始めます。</p>
+
+<p><span class="csscript"></span></p>
 
 <pre><code># これはコメント
 </code></pre>
@@ -60,7 +62,7 @@
 
 <p>上のコード例の右上にダークグレーの箱があるのに気付かれますでしょうか。それをクリックしてください。コードはCoffeeScriptとコンパイルされたJavaScriptとでスィッチします。これはページの丁度中で実行時に描かれています。そのためコンパイルされた出力が正しいことを確認できるでしょう。</p>
 
-<p>ご覧になられたとおり、変数の割当は完全にローカルに保持されます。グローバル変数を事故で作ることは不可能です。CoffeeScriptは実際にこのステップを延長し、高いレベルの変数を隠すことを難しくしています。このことがJavaScriptにおいて開発者が最も一般的に行ってしまう誤りのいくつかを防ぐ良い取り決めとなっています。</p>
+<p>ご覧になられたとおり、変数の割当は完全にローカルに保持されます。グローバル変数を事故で作ることは不可能です。CoffeeScriptは実際にはこのステップをさらに延長し、高いレベルの変数を隠すことを難しくしています。このことがJavaScriptにおいて開発者が最も一般的に行ってしまう誤りを防ぐ良い取引となっています。</p>
 
 <p>しかしながら、時々、グローバル変数を作ることは便利な事です。グローバルオブジェクト(ブラウザでは<code>window</code>)のプロパティとして直接設定するか、次のパターンを用いることで可能です。</p>
 
@@ -74,9 +76,9 @@ exports.MyVariable = "foo-bar"
 
 <h2>関数</h2>
 
-<p>CoffeeScriptはとても冗長なfunction文を削除しました。そしてそれを細い矢印:<code>-&gt;</code>で置き換えました。関数は1行でも良いし、インデントを行って複数行記述も可能です。関数の最後の式が暗黙的に返り値となります。つまり<code>return</code>文を使う必要がありません。関数の途中で返り値を返したい場合には使うことも可能です。</p>
+<p>CoffeeScriptはとても冗長なfunction文を削除しました。そしてそれを細い矢印<code>-&gt;</code>で置き換えました。関数は1行でも良いし、インデントを行って複数行記述も可能です。関数の最後の式が暗黙的に返り値となります。つまり<code>return</code>文を使う必要がありません。関数の途中で返り値を返したい場合には使うことも可能です。</p>
 
-<p>そのことを頭に入れて、次の例を見てみましょう:</p>
+<p>そのことを頭に入れて、次の例を見てみましょう</p>
 
 <p><span class="csscript"></span></p>
 
@@ -120,7 +122,7 @@ exports.MyVariable = "foo-bar"
   result
 </code></pre>
 
-<p>上の例では<code>nums</code>は関数に渡された全ての引数の配列です。これは<code>arguments</code>オブジェクトではありません。そうではなく本物の配列です。だからこれを取り扱うのに<code>Array.prototype.splice</code>や<code>jQuery.makeArray()</code>の使用をあなた自身で考慮する必要がありません。</p>
+<p>上の例では<code>nums</code>は関数に渡された全ての引数の配列です。これは<code>arguments</code>オブジェクトではありません。本物の配列です。だからこれを取り扱うのに<code>Array.prototype.splice</code>や<code>jQuery.makeArray()</code>の使用をあなた自身で考慮する必要がありません。</p>
 
 <p><span class="csscript"></span></p>
 
@@ -131,7 +133,7 @@ exports.MyVariable = "foo-bar"
 
 <h3>関数の実行</h3>
 
-<p>関数はJavaScriptと全く同じように実行することが可能です。括弧<code>()</code>を付けたり、<code>apply()</code>を適用したり、<code>call()</code>を呼んだりです。しかしRubyのように、CoffeeScriptは関数が最低一つの引数と実行されれば、自動的に関数を呼出します。</p>
+<p>関数はJavaScriptと全く同じように実行することが可能です。括弧:<code>()</code>を付けたり、<code>apply()</code>を適用したり、<code>call()</code>を呼んだりです。しかしRubyのように、CoffeeScriptは関数が最低一つの引数と実行されれば、自動的に関数を呼出します。</p>
 
 <p><span class="csscript"></span></p>
 
@@ -146,7 +148,7 @@ alert inspect a
 alert(inspect(a))
 </code></pre>
 
-<p>括弧は必須ではありませんが、直ぐに何がどんな引数と実行されるか明らかに判る場合以外は使用することをお勧めします。<code>inspect</code>を用いる最後の例では、私は最低でも<code>inspect</code>の実行には括弧を付けることを強くお勧めします。</p>
+<p>括弧は必須ではありませんが、何がどんな引数と実行されるか直ぐに明らかに判る場合以外は使用することをお勧めします。<code>inspect</code>を用いる最後の例では、私は最低でも<code>inspect</code>の実行には括弧を付けることを強くお勧めします。</p>
 
 <p><span class="csscript"></span></p>
 
@@ -167,7 +169,7 @@ alert(inspect(a))
 element.addEventListener "click", (e) =&gt; this.clickHandler(e)
 </code></pre>
 
-<p>これを行いたい理由は<code>addEventListener()</code>からのコールバックは<code>element</code>のコンテキストにて実行されるからです。すなわち<code>this</code>は<code>element</code>に等しくなります。もしあなたが<code>self = this</code>のような面倒をせずに<code>this</code>をローカルコンテキストに保持したい場合にはファットアローを用います。</p>
+<p>これを行いたい理由は<code>addEventListener()</code>からのコールバックは通常<code>element</code>のコンテキストにて実行されるからです。すなわち<code>this</code>は<code>element</code>に等しくなります。もしあなたが<code>self = this</code>のような面倒をせずに<code>this</code>をローカルコンテキストに留めたい場合にはファットアローを用います。</p>
 
 <p>このバインディングのアイデアはjQueryの<a href="http://api.jquery.com/jQuery.proxy/"><code>proxy()</code></a>や<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind">ES5</a>の<code>bind()</code>関数と似たコンセプトです。</p>
 
@@ -257,11 +259,13 @@ if 1 &gt; 0 then "Ok" else "Y2K!"
 
 <p><code>is not</code>の代わりに、<code>isnt</code>を使用可能です。</p>
 
+<p><span class="csscript"></span></p>
+
 <pre><code>if true isnt true
   alert "Opposite day!"
 </code></pre>
 
-<p>上の例でお気付きでしょうが、CoffeeScriptは<code>==</code>演算子を<code>===</code>に変換し、<code>!=</code>を<code>!==</code>に変換します。これはこの言語の私の好きな最もシンプルな機能の1つです。この考えの背景にあるものは何でしょうか？率直に言ってJavaScriptの型変換は少し変です。そしてそれらの比較演算子は比較のために型変換を強制します。そのことが理解し難い挙動に繋り、ひいては多くのバグの元となります。このトピックについては第7章でより長い議論を行います。</p>
+<p>上の例でお気付きでしょうが、CoffeeScriptは<code>==</code>演算子を<code>===</code>に変換し、<code>!=</code>を<code>!==</code>に変換します。これはこの言語の私の好きな最もシンプルな機能の1つです。この考えの背景にあるものは何でしょうか？率直に言ってJavaScriptの型変換は少し変です。そしてそれらの比較演算子は比較のために型変換を強制します。そのことが理解し難い挙動に繋り、ひいては多くのバグの元となります。この話題については第7章でより長い議論を行います。</p>
 
 <h2>文字列への挿入</h2>
 
@@ -280,7 +284,7 @@ question = "Bridgekeeper: What... is your favourite color?
 
 <h2>ループと内包表記</h2>
 
-<p>JavaScriptの配列の繰り返しはとても古風な文法でした。C言語のようなより古い言語を思い出させ、現在のオブジェクト指向言語とは異なります。ES5の<code>forEach()</code>の登場により状況はいくらか改善されました。しかしそれでも毎回関数呼出を必要とし、そのために遅いものとなっています。再びCoffeeScriptが美しい文法でその助けとなります。</p>
+<p>JavaScriptの配列の繰り返しはとても古風な文法でした。C言語のようなより古い言語を思い出させ、現在のオブジェクト指向言語とは異なります。ES5の<code>forEach()</code>の登場により状況はいくらか改善されました。しかしそれでも毎回関数呼出を必要とし、そのために遅いものとなっています。再びCoffeeScriptの美しい文法がその救いとなります。</p>
 
 <p><span class="csscript"></span></p>
 
@@ -319,7 +323,7 @@ release prisoner for prisoner in prisoners when prisoner[0] is "R"
 alert("#{first} #{last}") for first, last of names
 </code></pre>
 
-<p>CoffeeScriptが持つローレベルなループは<code>while</code>のみです。JavaScriptの<code>while</code>と同じような動作をします。しかし追加の利点として結果の配列を返します。つまり<code>Array.prototype.map()</code>関数と同じようにです。</p>
+<p>CoffeeScriptが持つ低レベルなループは<code>while</code>のみです。JavaScriptの<code>while</code>と同じような動作をします。しかし利点が追加されており、結果として配列を返します。つまり<code>Array.prototype.map()</code>関数と同じ挙動です。</p>
 
 <p><span class="csscript"></span></p>
 
@@ -352,14 +356,14 @@ minstrel = while num -= 1
 numbers[3..5] = [-3, -4, -5]
 </code></pre>
 
-<p>便利なのはJavaScriptでは<code>slice()</code>を文字列に対しても呼ぶことが可能なことです。そのため範囲を文字列に対して使用することで部分文字列を返すことが可能です。</p>
+<p>便利なことにJavaScriptでは<code>slice()</code>を文字列に対しても呼ぶことが可能です。そのため範囲を文字列に対して使用することで部分文字列を返すことが可能です。</p>
 
 <p><span class="csscript"></span></p>
 
 <pre><code>my = "my string"[0..2]
 </code></pre>
 
-<p>JavaScriptでは配列の中に値が存在するか確認することはとても面倒でした。特に<code>indexOf()</code>が全てのブラウザ間においてサポートされている訳ではなかったからです。(IE、君のことを言っているんだよ)。CoffeeScripitはこれを<code>in</code>演算子で解決します。次の例をご覧下さい。</p>
+<p>JavaScriptでは配列の中にある値が存在するか確認することはとても面倒でした。<code>indexOf()</code>が全てのブラウザ間においてサポートされている訳ではなかったからです。(IE、君のことを言っているんだよ)。CoffeeScripitはこれを<code>in</code>演算子で解決します。次の例をご覧下さい。</p>
 
 <p><span class="csscript"></span></p>
 
