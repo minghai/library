@@ -23,7 +23,7 @@
       複数行のコメント。たぶん、ライセンス
     ###
 
-既に手短に説明しましたが、CoffeeScriptでは空白が重要です。実際に、これは中括弧(`{}`)をタブで置き換えられることを意味します。これはPythonの文法からインスピレーションを得ており、あなたのスクリプトが同じ様式で整形される保障という素敵な副作用を持っています。そうしなければコンパイルもできません！
+既に手短に説明しましたが、CoffeeScriptでは空白が重要です。実際に、これは中括弧(`{}`)をタブで置き換えられることを意味します。これはPythonの文法からインスピレーションを得ており、あなたのスクリプトが同じ様式で整形されることが保障されるという素敵な副作用を持っています。そうしなければコンパイルもできません！
 
 
 ##変数とスコープ
@@ -219,7 +219,6 @@ CoffeeScriptはまたRubyの慣用句である後置`if`文を利用可能です
     if true isnt true
       alert "Opposite day!"
 
-You may have noticed in the examples above, that CoffeeScript is converting `==` operators into `===` and `!=` into `!==`. This is one of my favorite features to the language, and yet one of the most simple. What's the reasoning behind this? Well frankly JavaScript's type coercion is a bit odd, and its equality operator coerces types in order to compare them, leading to some confusing behaviors and the source of many bugs. There's a longer discussing on this topic in chapter 7.
 上の例でお気付きでしょうが、CoffeeScriptは`==`演算子を`===`に変換し、`!=`を`!==`に変換します。これはこの言語の私の好きな最もシンプルな機能の1つです。この考えの背景にあるものは何でしょうか？率直に言ってJavaScriptの型変換は少し変です。そしてそれらの比較演算子は比較のために型変換を強制します。そのことが理解し難い挙動に繋り、ひいては多くのバグの元となります。このトピックについては第7章でより長い議論を行います。
     
 ##文字列への挿入

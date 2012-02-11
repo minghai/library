@@ -85,10 +85,8 @@ CoffeeScriptの問題はあなたとJavaScriptの間に他のレイヤーを増�
       coffee.stdout.on 'data', (data) ->
         print data.toString()
 
-As you can see, the task context now has access to an `options` object containing any data specified by the user. If we run `cake` without any other arguments, all the tasks and options will be listed.
 ご覧のとおり、タスクコンテキストがユーザが指定した任意のデータを持つ`options`オブジェクトにアクセス可能となりました。もし`cake`を引数無しで実行した場合、全てのタスクと引数がリストされます。
 
-Cake's a great way of automating common tasks such as compiling CoffeeScript without going to the hassle of using bash or Makefiles. It's also worth taking a look at [Cake's source](http://jashkenas.github.com/coffee-script/documentation/docs/cake.html), a great example of CoffeeScript's expressiveness and beautifully documented alongside the code comments.
 Cakeは、bashやMakeファイルを用いずにCoffeeScriptをコンパイルするような一般的なタスクを自動化する、素晴しい方法です。[Cakeのソース](http://jashkenas.github.com/coffee-script/documentation/docs/cake.html)を読むことにはとても価値があります。CoffeeScriptの表現力の素晴しい例です。コードにはコメントが添えられて美しくドキュメント化されています。
 
 ##サーバサイドサポート

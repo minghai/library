@@ -283,7 +283,6 @@ CoffeeScriptはJavaScriptのいくつかの欠点を無くしましたが、他�
 
     objectType = type(aVar?)
     
-As an alternative to type checking, you can often use duck typing and the CoffeeScript existential operator together to eliminating the need to resolve an object's type. For example, let's say we're pushing a value onto an array. We could say that, as long as the 'array like' object implements `push()`, we should treat it like an array:
 型チェックの代わりに、しばしばダックタイピングとCoffeeScriptの存在確認演算子を一緒に用いることでオブジェクトの型を解く必要を無くすことが可能です。例として、配列に値をプッシュするとしましょう。こう言うことができます。「もし`array`であるかのようなオブジェクトが`push()`を実装しているのであれば、それを配列として扱うべきだろう。」
 
 <span class="csscript"></span>
@@ -385,7 +384,6 @@ JavaScriptの`parseInt()`関数は適切な基数を与えずに文字列を与�
 * 関数は使用される前に定義されねばならない。(以前は[関数はどこで定義しても良かった](http://whereswalden.com/2011/01/24/new-es5-strict-mode-requirement-function-statements-not-at-top-level-of-a-program-or-function-are-prohibited/))。
 * `arguments`は変更不可(インミュータブル)
 
-CoffeeScript already abides by a lot of strict mode's requirements, such as always using `var` when defining variables, but it's still very useful to enable strict mode in your CoffeeScript programs. Indeed, CoffeeScript is taking this a step further and in [future versions](https://github.com/jashkenas/coffee-script/issues/1547) will check a program's compliance to strict mode at compile time.
 CoffeeScriptは既にストリクトモードの要求の多くを遵守しています。例えば変数定義では常に`var`を用います。しかしそれでもあなたのCoffeeScriptプログラムにおいてストリクトモードを許可するのはとても有益です。実際にCoffeeScriptはこれをより一歩進めて、[将来のバージョン](https://github.com/jashkenas/coffee-script/issues/1547)ではコンパイル時にストリクトモードに対する整合性をチェックするようになります。
 
 ###ストリクトモードの使用
