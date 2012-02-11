@@ -8,9 +8,11 @@
 
 メタ的な意味で驚いたのはCoffeeScriptインタプリタ自身が実際にCoffeeScriptで書かれていたことでした。それは卵と鶏のパラドックスがついに解決したかに見えました！
 
-さて、それでは最初に基本的な事柄に取り掛かりましょう。CoffeeScriptにはセミコロンがありません。コンパイル時に自動的に追加してくれます。セミコロンはJavaScriptコミュニティにおいて、いくつかのおかしなインタプリタの挙動[behavior](http://bonsaiden.github.com/JavaScript-Garden/#core.semicolon)により多くの議論の的でした。とにかく、CoffeeScriptはこの問題を単純にセミコロンを文法から消し、状況により追加することで解決しました。
+さて、それでは最初に基本的な事柄に取り掛かりましょう。CoffeeScriptにはセミコロンがありません。コンパイル時に自動的に追加してくれます。セミコロンはJavaScriptコミュニティにおいて、いくつかのおかしなインタプリタの[挙動](http://bonsaiden.github.com/JavaScript-Garden/#core.semicolon)により多くの議論の的でした。とにかく、CoffeeScriptはこの問題を単純にセミコロンを文法から消し、裏側で必要に応じて追加することで解決しました。
 
 コメントはRubyのコメントと同じフォーマットです。ハッシュ文字(`#`:通称、シャープ)で始めます。
+
+<span class="csscript"></span>
 
     # これはコメント
     
