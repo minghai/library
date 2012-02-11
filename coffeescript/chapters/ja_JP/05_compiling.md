@@ -14,7 +14,7 @@ CoffeeScriptの問題はあなたとJavaScriptの間に他のレイヤーを増�
 
 [Cake](http://jashkenas.github.com/coffee-script/#cake)はとてもシンプルなビルドシステムで[Make](http://www.gnu.org/software/make/) や [Rake](http://rake.rubyforge.org/)に倣っています。このライブラリは`coffee-script`のnpmパッケージにバンドルされており`cake`という名前のコマンドで利用可能です。
 
-`Cakefile`と呼ばれるファイルにCoffeeScriptを用いることでタスクを定義できます。`cake [task] [options]`を同じディレクトリで実行することにより、Cakeがそれらのタスクを取り上げ、実行さうぇることが可能です。全てのタスクとオプションのリストを表示するにはただ`cake`と入力します。
+`Cakefile`と呼ばれるファイルにCoffeeScriptを用いることでタスクを定義できます。`cake [task] [options]`を同じディレクトリで実行することにより、Cakeがそれらのタスクを取り上げ、起動します。全てのタスクとオプションのリストを表示するにはただ`cake`と入力します。
 
 タスクは`task()`関数を用いて定義します。名前と任意で詳細説明とコールバック関数を与えます。例として`Cakefile`という名のファイルを作り、`lib`と`src`という2つのディレクトリを作成してください。`Cakefile`には次の内容を追加します。
 
@@ -62,7 +62,7 @@ CoffeeScriptの問題はあなたとJavaScriptの間に他のレイヤーを増�
         coffee.stdout.on 'data', (data) ->
           print data.toString()
 
-もしあるタスクが別のタスクに依存する場合、別のタスクを`invoke(name)`を用いて実行すらことが可能です。`Cakefile`にもう一つ便利なタスクを追加しましょう。`index.html`を開きソースの変更の見張りを開始します。
+もしあるタスクが別のタスクに依存する場合、別のタスクを`invoke(name)`を用いて実行することが可能です。`Cakefile`にもう一つ便利なタスクを追加しましょう。`index.html`を開きソースの変更の見張りを開始します。
 
 <span class="csscript"></span>
 

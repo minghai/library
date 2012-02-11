@@ -38,7 +38,7 @@
 
 <p><a href="http://jashkenas.github.com/coffee-script/#cake">Cake</a>はとてもシンプルなビルドシステムで<a href="http://www.gnu.org/software/make/">Make</a> や <a href="http://rake.rubyforge.org/">Rake</a>に倣っています。このライブラリは<code>coffee-script</code>のnpmパッケージにバンドルされており<code>cake</code>という名前のコマンドで利用可能です。</p>
 
-<p><code>Cakefile</code>と呼ばれるファイルにCoffeeScriptを用いることでタスクを定義できます。<code>cake [task] [options]</code>を同じディレクトリで実行することにより、Cakeがそれらのタスクを取り上げ、実行さうぇることが可能です。全てのタスクとオプションのリストを表示するにはただ<code>cake</code>と入力します。</p>
+<p><code>Cakefile</code>と呼ばれるファイルにCoffeeScriptを用いることでタスクを定義できます。<code>cake [task] [options]</code>を同じディレクトリで実行することにより、Cakeがそれらのタスクを取り上げ、起動します。全てのタスクとオプションのリストを表示するにはただ<code>cake</code>と入力します。</p>
 
 <p>タスクは<code>task()</code>関数を用いて定義します。名前と任意で詳細説明とコールバック関数を与えます。例として<code>Cakefile</code>という名のファイルを作り、<code>lib</code>と<code>src</code>という2つのディレクトリを作成してください。<code>Cakefile</code>には次の内容を追加します。</p>
 
@@ -89,7 +89,7 @@ task 'build', 'Build lib/ from src/', -&gt;
       print data.toString()
 </code></pre>
 
-<p>もしあるタスクが別のタスクに依存する場合、別のタスクを<code>invoke(name)</code>を用いて実行すらことが可能です。<code>Cakefile</code>にもう一つ便利なタスクを追加しましょう。<code>index.html</code>を開きソースの変更の見張りを開始します。</p>
+<p>もしあるタスクが別のタスクに依存する場合、別のタスクを<code>invoke(name)</code>を用いて実行することが可能です。<code>Cakefile</code>にもう一つ便利なタスクを追加しましょう。<code>index.html</code>を開きソースの変更の見張りを開始します。</p>
 
 <p><span class="csscript"></span></p>
 
