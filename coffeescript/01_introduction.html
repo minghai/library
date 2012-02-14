@@ -31,15 +31,15 @@
 
 <p>もしあなたが間違いを見つけたり提案をお持ちならどうぞためらわずにこの本のgithubページ <a href="https://github.com/arcturo/library">GitHub page</a>にてチケットをオープンして下さい。また読者は私が書いた別の本、 <a href="http://oreilly.com/catalog/9781449307530/">JavaScript Web Applications by O'Reilly</a>にも興味を持たれるかもしれません。こちらの本はリッチなJavaScriptアプリケーションや状態をクライアントサイドに移動させることについて説明しています。</p>
 
-<p>それでは始めましょう。なぜCoffeeScriptを書くことは純粋なJavaScriptを書くよりも良いことなのでしょうか? 最初に上げられるのはコードの記述量が減ることです。CoffeeScriptはとても簡潔で、また空白を頼りにします。私の経験ではこれによりコードはオリジナルのJavaScriptに比べて3分の1から半分になります。さらにCoffeeScriptにはいくつかの素敵な機能があります。例えば配列の内包記述やプロトタイプエイリアス、クラスなどがあり、それらはあなたに必要なタイプ量をさらに減らします。</p>
+<p>それでは始めましょう。なぜCoffeeScriptを書くことは純粋なJavaScriptを書くよりも良いことなのでしょうか? 最初に上げられるのはコードの記述量が減ることです。CoffeeScriptはとても簡潔で、また空白を頼りにします。私の経験ではこれによりコードはオリジナルのJavaScriptに比べて3分の1から半分になります。さらにCoffeeScriptにはいくつかの素敵な機能があります。例えば配列の内包表記やプロトタイプエイリアス、クラスなどがあり、それらはあなたに必要なタイプ量をさらに減らします。</p>
 
 <p>もっと重要なことは、JavaScriptには多くの<a href="http://bonsaiden.github.com/JavaScript-Garden/">悩みの種</a>が存在し、多くの初心者をつまづかせます。CoffeeScriptはJavaScriptの機能から選抜された機能を用い、多くのおかしな点を直すことで美しくそれらを避けてしまいます。</p>
 
 <p>CoffeeScriptはJavaScriptの拡張ではありません。そのためCoffeeScriptの中でJavaScriptの外部ライブラリを使用可能とは言え、JavaScriptを変換無しにそのまま用いればシンタックスエラーとなります。コンパイラはCoffeeScriptのコードを対応するJavaScriptに変換しますので実行時に翻訳はしません。</p>
 
-<p>最初によくある誤解を解きましょう。CoffeeScriptを書くにつれJavaScriptの理解が必要となるでしょう。実行時エラーがJavaScriptの知識を要求するためです。しかしながらその事を言うなら、実行時エラーは普通、とても自明的です。そのため私はJavaScriptをCoffeeScriptに戻すことを問題に感じたことはありません。2つ目の問題として私が良く聞くのはCoffeeScriptの実行速度に関するものです。つまりCoffeeScriptのコンパイラが生成したコードは同等なJavaScriptよりも遅いというものです。しかし実際にはそれもまた問題ではありません。CoffeeScriptは手で書いたJavaScriptよりと同等に、またはより速く動作する傾向があります。</p>
+<p>最初によくある誤解を解きましょう。CoffeeScriptを書くにつれJavaScriptの理解が必要となるでしょう。実行時エラーがJavaScriptの知識を要求するためです。しかしその事を言うなら、実行時エラーは普通、とても自明的です。そのため私はJavaScriptをCoffeeScriptに戻すことを今の所問題に感じたことはありません。2つ目の問題として私が良く聞くのはCoffeeScriptの実行速度に関するものです。つまりCoffeeScriptのコンパイラが生成したコードは同等なJavaScriptよりも遅いというものです。しかし実際にはそれもまた問題ではありません。CoffeeScriptは手で書いたJavaScriptと同等に、またはより速く動作する傾向があります。</p>
 
-<p>CoffeeScriptを使用することの欠点は何でしょうか? そう、それはあなたとあなたのJavaScriptの間にまた別のコンパイルステップを挿入することです。CoffeeScriptは、できうる限り明快で理解しやすいJavaScriptを生成し、サーバーとの統合によるコンパイルの自動化にてその問題を軽減します。他の欠点として、他のどんな新しい言語でもそうですが、コミュニティが現時点では小さいことが挙げられます。あなたは既に詳しい協力者を得るのに苦労するでしょう。しかしCoffeeScriptは急速に勢いを得ています。IRCリストは充実していますのであなたのどんな問題も通常は適切に解答を得ることができるでしょう。</p>
+<p>CoffeeScriptを使用することの欠点は何でしょうか? そう、それはあなたとあなたのJavaScriptの間にまた別のコンパイルステップを挿入することです。CoffeeScriptは、明快で理解しやすいJavaScriptを生成することと、サーバー統合によるコンパイルの自動化によってその問題をできる限り軽減します。他の欠点として、他のどんな新しい言語でもそうですが、コミュニティが現時点では小さいことが挙げられます。あなたは既に詳しい協力者を得るのに苦労するでしょう。しかしCoffeeScriptは急速に勢いを得ています。IRCリストは充実していますのであなたのどんな問題も通常は適切に解答を得ることができるでしょう。</p>
 
 <p>CoffeeScriptはブラウザに限定されません。<a href="http://nodejs.org/">node.js</a>のようなJavaScriptのサーバーサイド実装でも大きな効果を得ることができるでしょう。加えてCoffeeScriptはより広い範囲での使用や統合を得ています。例えばRails3.1ではデフォルトとなりました。今がCoffeeScripitという列車に飛び乗るのに絶好の時です。今この言語を学習する時間の投資は後に多くの時間を節約することとして返還されるでしょう。</p>
 
@@ -49,7 +49,7 @@
 
 <p>JavaScriptからCoffeeScriptに戻す変換を行うことも<a href="http://js2coffee.org/">js2coffee</a>プロジェクトを用いて可能です。JavaScriptのプロジェクトをCoffeeScriptに移行する場合に特に便利です。</p>
 
-<p>実際にブラウザ版のCoffeeScriptコンパイラをあなた自身が用いることも可能です。<a href="http://jashkenas.github.com/coffee-script/extras/coffee-script.js">this script</a>をページに入れ、任意のCoffeeScriptをscriptタグと正しい型で記します。</p>
+<p>実際にブラウザ版のCoffeeScriptコンパイラをあなた自身が用いることも可能です。<a href="http://jashkenas.github.com/coffee-script/extras/coffee-script.js">このライブラリ</a>をあなたのページに入れ、任意のCoffeeScriptをscriptタグと正しい型で記述します。</p>
 
 <pre><code>&lt;script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
 &lt;script type="text/coffeescript"&gt;
@@ -57,7 +57,7 @@
 &lt;/script&gt;
 </code></pre>
 
-<p>実際の運用では明らかに、実行時にCoffeeScriptを翻訳したくはないでしょう。あなたのクライアントに対し全てを遅くしてしまいます。その代わりとして、CoffeeScriptは<a href="http://nodejs.org">node.js</a>上のコンパイラを事前にCoffeeScriptファイルを処理するために提供します。</p>
+<p>実際の運用では明らかに、実行時にCoffeeScriptを翻訳したくはないでしょう。あなたのクライアントに対し全てを遅くしてしまいます。その代わりとして、CoffeeScriptは<a href="http://nodejs.org">node.js</a>上のコンパイラを事前にCoffeeScriptファイルをコンパイルするために提供します。</p>
 
 <p>インストールするためにはまず最新の安定版<a href="http://nodejs.org">node.js</a>と<a href="http://npmjs.org/">npm</a> (the Node Package Manager)を持っているか確認してください。そうしたら次にnpmを用いてCoffeeScriptをインストールします。</p>
 
@@ -71,7 +71,7 @@
 
 <p><code>--output</code>が指定されていなければ、CoffeeScriptはJavaScriptファイルを同じ名前で作成します。この場合には<code>my-script.js</code>です。既存のファイルは上書きしますので不注意に存在するJavaScriptファイルを上書きしないよう注意してください。コマンドラインオプションの完全なリストを得るためには<code>--help</code>を与えます。</p>
 
-<p>上で見られるように、CoffeeScriptのデフォルト拡張子は<code>.coffee</code>です。このことが<a href="http://macromates.com/">TextMate</a>のようなテキストエディタにそのファイルがどの言語を保持しているのか理解させ、適切な構文ハイライトの提供を可能にします。デフォルトではTextMateはCoffeeScriptをサポートしません。しかしbundle<a href="https://github.com/jashkenas/coffee-script-tmbundle">bundle to do so</a> を用いて簡単にインストール可能です。</p>
+<p>上で見られるように、CoffeeScriptのデフォルト拡張子は<code>.coffee</code>です。このことが<a href="http://macromates.com/">TextMate</a>のようなテキストエディタにそのファイルがどの言語を保持しているのか理解させ、適切な構文ハイライトの提供を可能にします。デフォルトではTextMateはCoffeeScriptをサポートしません。しかし<a href="https://github.com/jashkenas/coffee-script-tmbundle">bundle</a> を用いて簡単にインストール可能です。</p>
 
 <p>もしここまでのコンパイルが少しばり不便で面倒に感じたとしても、それはその通りだからです。私達は後程、CoffeeScriptファイルを自動的にコンパイルすることでその問題を解決します。でもまずは言語の文法を見てみましょう。</p>
 

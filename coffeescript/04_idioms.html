@@ -61,7 +61,7 @@ var result = array.map(function(item, i){
 });
 </code></pre>
 
-<p>文法の章で説明したとおり、CoffeeScriptの内包表記は<code>map()</code>と同じ処理を行うことが可能です。内包表記を括弧で囲んでいることに注意して下さい。それはあなたが期待したmapを実行した結果配列を得ることを確実にするのに<strong>とても重要</strong>です。</p>
+<p>文法の章で説明したとおり、CoffeeScriptの内包表記は<code>map()</code>と同じ処理を行うことが可能です。内包表記を括弧で囲んでいることに注意して下さい。それはあなたが期待したmapを実行した結果の配列を得ることを確実にするのに<strong>とても重要</strong>です。</p>
 
 <p><span class="csscript"></span></p>
 
@@ -99,6 +99,7 @@ failed = []
 (if score &gt; 60 then passed else failed).push score for score in [49, 58, 76, 82, 88, 90]
 
 # または
+scores = [49, 58, 76, 82, 88, 90]
 passed = (score for score in scores when score &gt; 60)
 </code></pre>
 
