@@ -154,7 +154,7 @@ JavaScriptでプロパティの塊について繰返す場合には`in`演算子
         args.unshift(@logPrefix) if @logPrefix
         console?.log(args...)
         
-しかし次のことは心に留めておいてください。CoffeeScriptは自動的に関数の実行コンテキストをその関数が実行されるオブジェクトに設定します。上の例では`console`になるでしょう。もし指定したコンテキストを設定したい場合には`apply()`を手動で呼ばなければなりません。
+しかし次のことは心に留めておいてください。CoffeeScriptは自動的に関数の実行コンテキストをその関数が実行されるオブジェクトに設定します。上の例では`console`になるでしょう。もし特定のコンテキストを設定したい場合には`apply()`を手動で呼ばなければなりません。
 
 ##And/or
 
@@ -168,7 +168,7 @@ CoffeeScriptスタイルガイドは`or`は`||`より好ましく、`and`は`&&`
     string == string # true
     string is string # true
     
-CoffeeScriptへのとても嬉しい拡張の1つは`or equals`です。これはRuby使いなら`||=`と認識するでしょう。
+CoffeeScriptへのとても嬉しい拡張の1つは`or=`です。これはRuby使いなら`||=`と認識するでしょう。
     
 <span class="csscript"></span>
 
