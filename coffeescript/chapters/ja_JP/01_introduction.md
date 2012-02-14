@@ -6,7 +6,7 @@
 
 この本は完全なオープンソースです。[Alex MacCaw](http://alexmaccaw.co.uk) (または [@maccman](http://twitter.com/maccman))により書かれました。また次の人々より大きなご協力を頂きました。[David Griffiths](https://github.com/dxgriffiths), [Satoshi Murakami](http://github.com/satyr), そして[Jeremy Ashkenas](https://github.com/jashkenas)です.
 
-もしあなたが間違いを見つけたり提案をお持ちならどうぞためらわずにこの本のgithubページ [GitHub page](https://github.com/arcturo/library)にてチケットをオープンして下さい。また読者は私が書いた別の本、 [JavaScript Web Applications by O'Reilly](http://oreilly.com/catalog/9781449307530/)にも興味を持たれるかもしれません。こちらの本はリッチなJavaScriptアプリケーションや状態をクライアントサイドに移動させることについて説明しています。
+もしあなたが間違いを見つけたり提案をお持ちならどうぞためらわずにこの本の [githubページ](https://github.com/arcturo/library)にてチケットをオープンして下さい。また読者は私が書いた別の本、 [JavaScript Web Applications by O'Reilly](http://oreilly.com/catalog/9781449307530/)にも興味を持たれるかもしれません。こちらの本はリッチなJavaScriptアプリケーションや状態をクライアントサイドに移動させることについて説明しています。
 
 それでは始めましょう。なぜCoffeeScriptを書くことは純粋なJavaScriptを書くよりも良いことなのでしょうか? 最初に上げられるのはコードの記述量が減ることです。CoffeeScriptはとても簡潔で、また空白を頼りにします。私の経験ではこれによりコードはオリジナルのJavaScriptに比べて3分の1から半分になります。さらにCoffeeScriptにはいくつかの素敵な機能があります。例えば配列の内包表記やプロトタイプエイリアス、クラスなどがあり、それらはあなたに必要なタイプ量をさらに減らします。
 
