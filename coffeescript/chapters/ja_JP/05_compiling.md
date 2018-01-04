@@ -1,6 +1,6 @@
 <div class="back"><a href="index.html">&laquo; 索引に戻る</a></div>
 
-#自動的にCoffeeScriptをコンパイルする
+# 自動的にCoffeeScriptをコンパイルする
 
 CoffeeScriptの問題はあなたとJavaScriptの間に他のレイヤーを増やすことです。CoffeeScriptのファイルが変更され、古くなる度に手動でコンパイルせねばなりません。幸いなことにCoffeeScriptはいくつかのコンパイル代替形態を持っており、開発サイクルをいくらかスムーズにすることが可能です。
 
@@ -10,7 +10,7 @@ CoffeeScriptの問題はあなたとJavaScriptの間に他のレイヤーを増�
     
 上の例では全ての`src`ディレクトリ内の`.coffee`ファイルはコンパイルされ、`lib`ディレクトリに個々の出力が置かれます。これを呼ぶだけでもちょっと面倒かもしれません。自動化する方法を探しましょう。
 
-##Cake
+## Cake
 
 [Cake](http://jashkenas.github.com/coffee-script/#cake)はとてもシンプルなビルドシステムで[Make](http://www.gnu.org/software/make/) や [Rake](http://rake.rubyforge.org/)に倣っています。このライブラリは`coffee-script`のnpmパッケージにバンドルされており`cake`という名前のコマンドで利用可能です。
 
@@ -89,7 +89,7 @@ CoffeeScriptの問題はあなたとJavaScriptの間に他のレイヤーを増�
 
 Cakeは、bashやMakeファイルを用いずにCoffeeScriptをコンパイルするような一般的なタスクを自動化する、素晴しい方法です。[Cakeのソース](http://jashkenas.github.com/coffee-script/documentation/docs/cake.html)を読むことにはとても価値があります。CoffeeScriptの表現力の素晴しい例です。コードにはコメントが添えられて美しくドキュメント化されています。
 
-##サーバサイドサポート
+## サーバサイドサポート
 
 CakeをCoffeeScriptのコンパイルに用いるのは静的なサイトでは問題ありません。しかし動的なサイトではCoffeeScriptのコンパイルをリクエスト/レスポンスサイクルに統合せねばなりません。色々な統合ソリューションが人気の高いバックエンドの言語とフレームワークに対して既に存在します。例えば[Rails](http://rubyonrails.org/) や [Django](https://www.djangoproject.com/)です。
 
