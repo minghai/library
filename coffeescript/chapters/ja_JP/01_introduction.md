@@ -1,6 +1,6 @@
 <div class="back"><a href="index.html">&laquo; 索引へ戻る</a></div>
 
-#CoffeeScriptって何?
+# CoffeeScriptって何?
 
 [CoffeeScript](http://coffeescript.org)はJavaScriptにコンパイルできる小さな言語です。文法がRubyとPythonに影響を受けていてそれらの2つの言語の多くの機能を実装しています。この本はあなたがCoffeeScriptを学習し、ベストプラクティスを理解し、優れたクライアントサイドアプリケーションの開発を開始するのを手助けします。この本は小さく、7章しかありません。しかしそれは適切なことでしょう、CoffeeScriptもまた小さな言語ですから。
 
@@ -20,7 +20,7 @@ CoffeeScriptを使用することの欠点は何でしょうか? そう、それ
 
 CoffeeScriptはブラウザに限定されません。[node.js](http://nodejs.org/)のようなJavaScriptのサーバーサイド実装でも大きな効果を得ることができるでしょう。加えてCoffeeScriptはより広い範囲での使用や統合を得ています。例えばRails3.1ではデフォルトとなりました。今がCoffeeScripitという列車に飛び乗るのに絶好の時です。今この言語を学習する時間の投資は後に多くの時間を節約することとして返還されるでしょう。
 
-##最初のセットアップ
+## 最初のセットアップ
 
 最初に試してみる最も簡単な方法はブラウザを用いることです。[http://coffeescript.org](http://coffeescript.org)を開いて*Try CoffeeScript*をクリックして下さい。このサイトはブラウザ版のCoffeeScriptコンパイラを用いています。左側のパネルに入力した任意のCoffeeScriptを右側のパネルにJavaScriptとして変換します。
 
